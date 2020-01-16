@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<project
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>ar.com.adecco.agora</groupId>
+		<artifactId>adecco-proveedores</artifactId>
+		<version>8.0.Final</version>
+        <relativePath>../adecco-proveedores-parent/pom.xml</relativePath>
+	</parent>
+	
+	<artifactId>adecco-proveedores-daos</artifactId>
+	<packaging>jar</packaging>
+	
+	<name>Adecco proveedores Daos</name>
+	<description>Adecco proveedores Daos</description>
+	
+	<dependencies>
+		<!-- Persistence -->
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.0-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Dependency Injection -->
+        <dependency>
+            <groupId>javax.enterprise</groupId>
+            <artifactId>cdi-api</artifactId>
+        </dependency>
+
+        <!-- Log -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <!-- Utils -->
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.javatuples</groupId>
+            <artifactId>javatuples</artifactId>
+        </dependency>
+
+		<!-- Modules -->
+        <dependency>
+     			<groupId>ar.com.syntagma</groupId>
+				<artifactId>utilidades-jar</artifactId>
+				<version>1.2.0.Final</version>
+        </dependency>
+		
+		<!-- Modules -->
+		<dependency>
+			<groupId>ar.com.adecco.agora</groupId>
+			<artifactId>adecco-proveedores-model</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+
+        <dependency>
+            <groupId>ar.com.adecco.agora</groupId>
+            <artifactId>usuarios-dominio-jar</artifactId>
+            <version>4.8.0.Final</version>
+        </dependency>	
+
+		<dependency>
+			<groupId>ar.com.adecco.agora</groupId>
+			<artifactId>ebs-dominio-jar</artifactId>
+			<version>5.6.0.Final</version>
+		</dependency>
+		
+        <dependency>
+            <groupId>commons-configuration</groupId>
+            <artifactId>commons-configuration</artifactId>
+            <version>1.6</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>net.sf.dozer</groupId>
+            <artifactId>dozer</artifactId>
+        </dependency>   
+        
+	</dependencies>
+
+	<build>
+		<finalName>adecco-proveedores-daos</finalName>
+	</build>
+</project>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0"
+	xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+        http://java.sun.com/xml/ns/persistence
+        http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+	<persistence-unit name="primary" transaction-type="JTA">
+
+		<jta-data-source>java:jboss/datasources/preliqDS</jta-data-source>
+
+      <!--<class>ar.com.adecco.dominio.ebs.ap.Cheque</class>
+          <class>ar.com.adecco.dominio.ebs.ap.Chequera</class> -->
+        <class>ar.com.adecco.dominio.ebs.ap.CuentaBancaria</class>
+        <class>ar.com.adecco.dominio.ebs.ap.DistribucionFactura</class>
+        <class>ar.com.adecco.dominio.ebs.ap.Factura</class>
+        <class>ar.com.adecco.dominio.ebs.ap.Impuesto</class>
+        <class>ar.com.adecco.dominio.ebs.ar.AgendaCobro</class>
+        <class>ar.com.adecco.dominio.ebs.ar.AplicacionNotaCredito</class>
+        <class>ar.com.adecco.dominio.ebs.ar.AplicacionRecibo</class>
+        <class>ar.com.adecco.dominio.ebs.ar.Cliente</class>
+        <class>ar.com.adecco.dominio.ebs.ar.Cobrador</class>
+        <class>ar.com.adecco.dominio.ebs.ar.CondicionPago</class>
+        <class>ar.com.adecco.dominio.ebs.ar.DomicilioFacturacion</class>
+        <class>ar.com.adecco.dominio.ebs.ar.Factura</class>
+        <class>ar.com.adecco.dominio.ebs.ar.Impuesto</class>
+        <class>ar.com.adecco.dominio.ebs.ar.Linea</class>
+        <class>ar.com.adecco.dominio.ebs.ar.MedioCobro</class>
+        <class>ar.com.adecco.dominio.ebs.ar.PerfilCliente</class>
+        <class>ar.com.adecco.dominio.ebs.ar.Recibo</class>
+        <class>ar.com.adecco.dominio.ebs.ar.ReciboHistorial</class>
+        <class>ar.com.adecco.dominio.ebs.ar.ReciboLote</class>
+        <class>ar.com.adecco.dominio.ebs.ar.SubCliente</class>
+        <class>ar.com.adecco.dominio.ebs.ar.Talonario</class>
+        <class>ar.com.adecco.dominio.ebs.ar.TipoTransaccion</class>
+        <class>ar.com.adecco.dominio.ebs.fnd.Aplicacion</class>
+        <class>ar.com.adecco.dominio.ebs.fnd.Moneda</class>
+        <class>ar.com.adecco.dominio.ebs.fnd.PlanCuentas</class>
+        <class>ar.com.adecco.dominio.ebs.fnd.Provincia</class>
+        <class>ar.com.adecco.dominio.ebs.fnd.Responsabilidad</class>
+        <class>ar.com.adecco.dominio.ebs.fnd.Segmento</class>
+        <class>ar.com.adecco.dominio.ebs.fnd.Usuario</class>
+        <class>ar.com.adecco.dominio.ebs.fnd.ValorContable</class>
+        <class>ar.com.adecco.dominio.ebs.fnd.ValorContableTraducido</class>
+        <class>ar.com.adecco.dominio.ebs.gl.CuentaContable</class>
+        <class>ar.com.adecco.dominio.ebs.gl.JuegoLibros</class>
+        <class>ar.com.adecco.dominio.ebs.gl.Periodo</class>
+        <class>ar.com.adecco.dominio.ebs.hr.Compania</class>
+        <class>ar.com.adecco.dominio.ebs.hr.DireccionCompania</class>
+        <class>ar.com.adecco.dominio.ebs.hr.Empleado</class>
+        <class>ar.com.adecco.dominio.ebs.hr.InformacionCompania</class>
+        <class>ar.com.adecco.dominio.ebs.po.DistribucionOrdenCompra</class>
+        <class>ar.com.adecco.dominio.ebs.po.DistribucionSolicitud</class>
+        <class>ar.com.adecco.dominio.ebs.po.LineaOrdenCompra</class>
+        <class>ar.com.adecco.dominio.ebs.po.LineaSolicitud</class>
+        <class>ar.com.adecco.dominio.ebs.po.OrdenCompra</class>
+        <class>ar.com.adecco.dominio.ebs.po.Proveedor</class>
+        <class>ar.com.adecco.dominio.ebs.po.Solicitud</class>
+        <class>ar.com.adecco.dominio.ebs.po.SucursalProveedor</class>
+        <class>ar.com.adecco.dominio.ebs.po.TipoLinea</class>
+        <class>ar.com.adecco.dominio.ebs.xx.AccionLlamado</class>
+        <class>ar.com.adecco.dominio.ebs.xx.CategoriaProveedor</class>
+        <class>ar.com.adecco.dominio.ebs.xx.CentroCostos</class>
+        <class>ar.com.adecco.dominio.ebs.xx.CentroFacturacion</class>
+        <class>ar.com.adecco.dominio.ebs.xx.ComprobanteCliente</class>
+        <class>ar.com.adecco.dominio.ebs.xx.Contacto</class>
+        <class>ar.com.adecco.dominio.ebs.xx.Documento</class>
+        <class>ar.com.adecco.dominio.ebs.xx.InformacionSucursal</class>
+        <class>ar.com.adecco.dominio.ebs.xx.LiderCobrador</class>
+        <class>ar.com.adecco.dominio.ebs.xx.Llamada</class>
+        <class>ar.com.adecco.dominio.ebs.xx.LlamadoCobranza</class>
+        <class>ar.com.adecco.dominio.ebs.xx.LlamadoTransaccion</class>
+        <class>ar.com.adecco.dominio.ebs.xx.PmcCliente</class>
+        <class>ar.com.adecco.dominio.ebs.xx.ResponsableNominaNexus</class>
+        <class>ar.com.adecco.dominio.ebs.xx.RespuestaLlamado</class>
+        <class>ar.com.adecco.dominio.ebs.xx.SaldosCliente</class>
+       
+<!--        <class>ar.com.adecco.dominio.ebs.xx.Sucursal</class>
+        <class>ar.com.adecco.dominio.ebs.xx.SucursalNominaNexus</class>
+        <class>ar.com.adecco.dominio.ebs.xx.SucursalNominaNexusId</class>-->
+
+        <class>ar.com.adecco.dominio.contacto.ConfiguracionModuloDocumentacionAdicional</class>
+        <class>ar.com.adecco.dominio.contacto.ConfiguracionModuloDocumentacionAdicionalCentroCostos</class>
+        <class>ar.com.adecco.dominio.contacto.ConfiguracionModuloDocumentacionAdicionalSubCliente</class>
+        <class>ar.com.adecco.dominio.contacto.ConfiguracionModuloFacturacion</class>
+        <class>ar.com.adecco.dominio.contacto.ConfiguracionModuloFacturacionSubCliente</class>
+        <class>ar.com.adecco.dominio.contacto.ConfiguracionModuloNovedades</class>
+        <class>ar.com.adecco.dominio.contacto.ConfiguracionModuloProveedores</class>
+        <class>ar.com.adecco.dominio.contacto.Modulo</class>
+        <class>ar.com.adecco.dominio.menues.Aplicacion</class>
+        <class>ar.com.adecco.dominio.menues.AsignacionLinkUtil</class>
+        <class>ar.com.adecco.dominio.menues.LinkUtil</class>
+        <class>ar.com.adecco.dominio.menues.Menu</class>
+        <class>ar.com.adecco.dominio.menues.Perfil</class>
+        <class>ar.com.adecco.dominio.menues.Permiso</class>
+        <class>ar.com.adecco.dominio.menues.UsuarioAdecco</class>
+        <class>ar.com.adecco.dominio.persona.PerfilCargo</class>
+        <class>ar.com.adecco.dominio.persona.Cargo</class>
+        <class>ar.com.adecco.dominio.persona.Interes</class>
+        <class>ar.com.adecco.dominio.persona.MedioComunicacion</class>
+        <class>ar.com.adecco.dominio.persona.NivelAcademico</class>
+        <class>ar.com.adecco.dominio.persona.PerfilAcademico</class>
+        <class>ar.com.adecco.dominio.persona.Persona</class>
+        <class>ar.com.adecco.dominio.persona.PersonaExterna</class>
+        <class>ar.com.adecco.dominio.persona.PersonaInterna</class>
+        <class>ar.com.adecco.dominio.persona.PersonaMedioComunicacion</class>
+        <class>ar.com.adecco.dominio.persona.PersonaRelacion</class>
+        <class>ar.com.adecco.dominio.persona.PersonaRelacionCliente</class>
+        <class>ar.com.adecco.dominio.persona.PersonaRelacionProveedor</class>
+        <class>ar.com.adecco.dominio.persona.ResponsabilidadGrupo</class>
+        <class>ar.com.adecco.dominio.persona.ResponsabilidadGrupoCargo</class>
+        <class>ar.com.adecco.dominio.persona.Sector</class>
+        <class>ar.com.adecco.dominio.persona.TituloAcademico</class>
+
+        <class>ar.com.adecco.proveedores.model.Comprobante</class>
+        <class>ar.com.adecco.proveedores.model.Factura</class>
+        <class>ar.com.adecco.proveedores.model.ComprobanteAdjunto</class>
+        <class>ar.com.adecco.proveedores.model.FacturaEstado</class>
+        <class>ar.com.adecco.proveedores.model.IIBBMultilateral</class>
+        <class>ar.com.adecco.proveedores.model.InterfazAP</class>
+        <class>ar.com.adecco.proveedores.model.Linea</class>
+        <class>ar.com.adecco.proveedores.model.NotaCredito</class>
+        <class>ar.com.adecco.proveedores.model.NotaDebito</class>
+<!-- 		<class>ar.com.adecco.proveedores.model.Pago</class> -->
+        <class>ar.com.adecco.proveedores.model.Proveedor</class>
+        <class>ar.com.adecco.proveedores.model.ProveedorAdjunto</class>
+        <class>ar.com.adecco.proveedores.model.ProveedorEstado</class>
+
+
+
+
+		<properties>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.Oracle9iDialect" />
+			<property name="hibernate.hbm2ddl.auto" value="none" />  
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.format_sql" value="true" />
+			<property name="hibernate.default_schema" value="preliq" />
+            <property name="hibernate.jdbc.batch_size" value="10" />
+            <property name="hibernate.order_inserts" value="true" />
+            <property name="hibernate.order_updates" value="true" />
+		</properties>
+	</persistence-unit>
+</persistence>

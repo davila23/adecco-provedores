@@ -1,0 +1,698 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui">
+
+<!--@elvariable id="controller" type="ar.com.adecco.proveedores.action.NotaCreditoProveedorAction"-->
+<ui:param name="controller" value="#{notaCreditoProveedorAction}" />
+
+	<p:outputPanel id="admNotaCredito">
+
+        <!--@elvariable id="perfilUsuario" type="ar.com.adecco.proveedores.model.Perfil"-->
+        <ui:param name="perfilUsuario" value="#{notaCreditoProveedorAction.perfilUsuario}" />
+        <!--@elvariable id="perfilProveedor" type="ar.com.adecco.proveedores.model.Perfil"-->
+		<ui:param name="perfilProveedor" value="#{notaCreditoProveedorAction.perfilProveedor}" />
+
+		<h:form styleClass="stdform" id="admNotaCreditoForm" enctype="multipart/form-data">
+			<!-- ALTA FACTURA -->
+			<h:panelGroup
+				rendered="#{controller.vista == 'ALTA_NC'}">
+				<!-- HEADER FACTURA -->
+				<div class="contenttitle">
+					<h2 class="form">
+						<span>Seleccione una Factura</span>
+					</h2>
+				</div>
+
+				<p:dataTable id="facturasDataTable" var="fc"
+                    value="#{controller.facturas}" lazy="true"
+					paginator="true" rows="10" emptyMessage="No existen facturas."
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					currentPageReportTemplate="Mostrando {startRecord} a {endRecord} de {totalRecords} registros"
+					rowsPerPageTemplate="10,20,50"
+					paginatorAlwaysVisible="false"
+					paginatorPosition="bottom"
+					styleClass="stdtable">
+
+					<p:column styleClass="head0 con0" style="text-align: center;">
+						<f:facet name="header">
+							<h:outputText value="Nro." />
+						</f:facet>
+						<p:commandLink value="#{fc.letraNumero}"
+                                       rendered="#{fc.estado == 'APROBADA' or fc.estado == 'PAGADA'}"
+                                       action="#{controller.asociarFactura(perfilProveedor, fc)}"
+                                       update=":admNotaCredito" />
+                        <h:outputText value="#{fc.letraNumero}"
+                                      rendered="#{fc.estado != 'APROBADA' and fc.estado != 'PAGADA'}"
+                                      title="Factura no aprobada o pagada" />
+						<f:facet name="footer">
+							<h:outputText value="Nro." />
+						</f:facet>
+					</p:column>
+
+                    <p:column styleClass="head1 con1" style="text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="Estado" />
+                        </f:facet>
+                        <h:outputText value="#{fc.estado.nombre}" />
+                        <f:facet name="footer">
+                            <h:outputText value="Estado" />
+                        </f:facet>
+                    </p:column>
+
+                    <p:column styleClass="head0 con0" style="text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="Estado EBS" />
+                        </f:facet>
+                        <h:outputText value="#{fc.estadoEbs.nombre}" style="color: red;" />
+                        <f:facet name="footer">
+                            <h:outputText value="Estado EBS" />
+                        </f:facet>
+                    </p:column>
+
+                    <p:column styleClass="head1 con1" style="text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="Fecha" />
+                        </f:facet>
+                        <h:outputText value="#{fc.fecha}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                        <f:facet name="footer">
+                            <h:outputText value="Fecha" />
+                        </f:facet>
+                    </p:column>
+
+                    <p:column styleClass="head0 con0" style="text-align: right;">
+                        <f:facet name="header">
+                            <h:outputText value="Importe" />
+                        </f:facet>
+                        <h:outputText value="#{fc.importe}">
+                            <f:convertNumber type="currency" currencySymbol="" />
+                        </h:outputText>
+                        <f:facet name="footer">
+                            <h:outputText value="Importe" />
+                        </f:facet>
+                    </p:column>
+				</p:dataTable>
+				<br />
+				<div style="text-align: right;">
+					<p:commandButton value="Volver" action="#{controller.volver}"
+						 update=":panelControl" styleClass="stdbtn" />
+				</div>
+
+			</h:panelGroup>
+
+			<!-- EDICION FACTURA - CONSULTA -->
+			<h:panelGroup
+				rendered="#{controller.vista == 'EDICION_NC'}">
+				
+				<!-- HEADER FACTURA -->
+				<div class="contenttitle">
+					<h2 class="form">
+						<span>Detalle de Nota de Crédito</span>
+					</h2>
+				</div>
+
+				<small class="desc no-margin-left">Los campos indicados con (*) son obligatorios.</small>
+
+				<div class="stdform-content">
+					<div class="one_half">
+						<h:outputLabel value="Número *" />
+						<span class="field">
+							<p:inputMask mask="9999-99999999"
+								value="#{controller.notaCredito.numero}"
+								 />
+						</span>
+					</div>
+					<div class="one_half last">
+						<h:outputLabel value="Estado" />
+						<span class="field">
+							<h:inputText value="#{controller.notaCredito.estado.nombre}"
+								disabled="true" />
+						</span>
+					</div>
+					<br clear="all" />
+					<div class="one_half">
+						<h:outputLabel value="Fecha *" />
+						<span class="field">
+							<p:calendar id="calendarFecha"
+								value="#{controller.notaCredito.fecha}"
+								converterMessage="El formato del campo fecha debe ser dd/mm/aaaa" pattern="dd/MM/yyyy"
+								>
+								<p:ajax event="change" update="calendarFecha" />
+								<p:ajax event="dateSelect" update="calendarFecha" />
+								<f:validator validatorId="validadorFecha" />
+							</p:calendar>
+						</span>
+					</div>
+					<div class="one_half last">
+						<h:outputLabel value="Importe sin IVA *" />
+						<span class="field">
+							<h:inputText styleClass="autonumeric autonumeric-currency" style="text-align: right;"
+								value="#{controller.notaCredito.importe}"
+								>
+								<f:convertNumber type="currency" locale="es-AR" currencySymbol="" />
+							</h:inputText>
+ 						</span>
+					</div>
+					<br clear="all" />
+					<div class="one_half">
+						<h:outputLabel value="Letra *" />
+						<span class="field">
+							<h:selectOneMenu id="comboLetra" value="#{controller.notaCredito.letra}"
+								>
+								<f:selectItems value="#{controller.comboLetras}" var="letra" itemLabel="#{letra.letra}"
+									itemValue="#{letra.letra}" />
+								<p:ajax event="change" update="comboLetra" />
+							</h:selectOneMenu>
+						</span>
+					</div>
+					<div class="one_half last">
+						<h:outputLabel value="Compañía" />
+						<span class="field">
+							<h:inputText disabled="true"
+								value="#{controller.notaCredito.compania.nombre}" />
+						</span>
+					</div>
+					<br clear="all" />
+					<div class="one_half ">
+						<h:outputLabel value="Código Autorización *" />
+						<span class="field">
+							<h:selectOneMenu id="comboCodAut" value="#{controller.notaCredito.cae}"
+								>
+								<f:selectItems value="#{controller.comboCodigoAutorizacion}" var="codigo"
+									itemLabel="#{codigo.label}" itemValue="#{codigo.value}" />
+								<p:ajax event="change" update="comboCodAut" />
+							</h:selectOneMenu>
+						</span>
+					</div>
+					<div class="one_half last">
+						<h:outputLabel value="Nro. Código Autorización *" />
+						<span class="field">
+							<h:inputText value="#{controller.notaCredito.numeroCae}"
+								maxlength="14"
+								 />
+						</span>
+					</div>
+					<br clear="all" />
+					<div class="one_half">
+						<h:outputLabel class="twolines">Fecha Vencimiento <br />Código Autorización *</h:outputLabel>
+						<span class="field">
+							<p:calendar id="fechaVencCalendar"
+								value="#{controller.notaCredito.fechaVencimientoCae}"
+								converterMessage="El formato del campo fecha de vencimiento debe ser dd/mm/aaaa" pattern="dd/MM/yyyy"
+								>
+								<f:validator validatorId="validadorFecha" />
+								<p:ajax event="change" update="fechaVencCalendar" />
+								<p:ajax event="dateSelect" update="fechaVencCalendar" />
+							</p:calendar>
+						</span>
+					</div>
+					<div class="one_half last">
+						<h:outputLabel value="Factura Aplicada" />
+						<span class="field">
+							<span class="uneditable-input uneditable-input-disabled">#{controller.notaCredito.facturaAplicada.tipoLetraNumero}</span>
+						</span>
+					</div>
+					<br clear="all" />
+					<div class="one_half">
+						<h:outputLabel value="Prov. Presto Servicio *" />
+						<span class="field">
+							<h:selectOneMenu id="comboPPS" value="#{controller.provinciaPrestoServicio}"
+								>
+								<f:selectItems value="#{controller.provinciasPrestoServicio}" var="provincia"
+									itemValue="#{provincia}" itemLabel="#{provincia}" />
+								<p:ajax event="change" update="comboPPS" />
+							</h:selectOneMenu>
+						</span>
+						<small class="desc">Las provincias con (*) no están cargadas en el convenio Multilateral.</small>
+					</div>
+					<br clear="all" />
+				</div>
+
+				<!-- DETAIL FACTURA -->
+				<div class="contenttitle">
+					<h2 class="list">
+						<span>Items</span>
+					</h2>
+				</div>
+				
+				<p:dataTable id="listaLineas" var="_linea" value="#{controller.listaLineas}"
+					emptyMessage="No hay registros cargados."
+					styleClass="stdtable"
+					rowIndexVar="rowIndex">
+
+					<p:column headerText="Nro." styleClass="head0 con0" style="text-align: center;">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+
+                    <p:column headerText="Línea FC" styleClass="head1 con1" style="text-align: center;">
+                        <h:outputText value="#{_linea.lineaAplicada.numero}">
+                            <f:convertNumber integerOnly="true" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Línea OC" styleClass="head1 con1" style="text-align: center;">
+                        <h:outputText value="#{_linea.lineaAplicada.lineaOrdenCompra.numeroLinea}">
+                            <f:convertNumber integerOnly="true" />
+                        </h:outputText>
+                    </p:column>
+
+					<p:column headerText="Descripción" styleClass="head0 con0">
+						<h:outputText value="#{_linea.descripcion}" />
+					</p:column>
+
+					<p:column styleClass="head1 con1" style="text-align: center;">
+						<f:facet name="header">
+							<h:outputText value="UM" title="Unidad de Medida" />
+						</f:facet>
+						<h:outputText value="#{_linea.lineaAplicada.lineaOrdenCompra.unidadMedida}" />
+					</p:column>
+
+					<p:column styleClass="head0 con0">
+						<f:facet name="header">
+							<h:outputText value="Nota al Prov." title="Nota al Proveedor" />
+						</f:facet>
+						<h:outputText value="#{_linea.lineaAplicada.lineaOrdenCompra.notaAlProveedor}" />
+					</p:column>
+
+					<p:column styleClass="head1 con1" style="text-align: right;">
+						<f:facet name="header">
+							<h:outputText value="Precio U." title="Precio Unitario" />
+						</f:facet>
+						<h:outputText value="#{_linea.lineaAplicada.lineaOrdenCompra.precioUnitario}">
+							<f:convertNumber type="currency" locale="es-AR" currencySymbol="" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Cantidad" styleClass="head0 con0" style="text-align: center;">
+						<h:inputText id="cantidad"
+							value="#{_linea.cantidad}"
+							styleClass="autonumeric autonumeric-quantity" style="text-align: right; width: 50px;"
+						>
+							<f:ajax event="change" listener="#{controller.onLineaCantidadChanged(_linea)}"
+								render="cantidad importe :admNotaCreditoForm:importeTotal" />
+							<f:convertNumber type="number" maxFractionDigits="5" locale="es-AR" />
+						</h:inputText>
+					</p:column>
+
+					<p:column headerText="Importe" styleClass="head1 con1" style="text-align: center;">
+						<h:inputText id="importe"
+							value="#{_linea.importe}"
+							styleClass="autonumeric autonumeric-currency" style="text-align: right; width: 100px;"
+						>
+							<f:ajax event="change" listener="#{controller.onLineaImporteChanged(_linea)}"
+								render="cantidad importe :admNotaCreditoForm:importeTotal" />
+							<f:convertNumber type="currency" locale="es-AR" currencySymbol="" />
+						</h:inputText>
+					</p:column>
+
+					<p:column styleClass="head0 con0"
+						rendered="#{reglasVisualizacion.mostrar(controller.notaCredito.estado, perfilUsuario, 'VER')
+							and controller.proveedorHabilitado}"
+                        style="text-align: center;">
+						<p:commandLink value="Eliminar"
+							action="#{controller.eliminarLinea(_linea)}"
+							onclick="if(!confirm('¿Está seguro que desea eliminar el item de la nota de crédito?')) return false;"
+							update=":admNotaCredito" />
+					</p:column>
+				</p:dataTable>
+				
+				<h:panelGroup id="importeTotal" style="float: right; margin: 0 10px 10px;">
+					<h:outputText value="Importe Total: " style="font-weight: bold;" />
+					<h:outputText value="#{controller.importeTotalLineas}">
+						<f:convertNumber type="currency" locale="es-AR" currencySymbol="" />
+					</h:outputText>
+				</h:panelGroup>
+				<p:commandButton value="Agregar" update=":lineasNCDialogForm"
+					oncomplete="PF('dlgPopUpLinea').show();"
+					rendered="#{reglasVisualizacion.mostrar(controller.notaCredito.estado, perfilUsuario, 'VER')
+								and controller.proveedorHabilitado}"
+					styleClass="stdbtn" style="margin: 6px 0 16px;" />
+				<br clear="all" />
+				
+				
+				<!-- DETAIL IMPUESTO -->
+				<div class="contenttitle">
+					<h2 class="list">
+						<span>Items Impuestos</span>
+					</h2>
+				</div>
+
+				<p:dataTable id="listaImpuestos" var="_impuesto" value="#{controller.listaImpuestos}"
+					emptyMessage="No hay registros cargados."
+					styleClass="stdtable"
+					rowIndexVar="rowIndex">
+
+					<p:column headerText="Nro." styleClass="head0 con0" style="text-align: center;">
+						<h:outputText value="#{controller.listaLineas.size() + rowIndex + 1}" />
+					</p:column>
+
+					<p:column headerText="Descripción" styleClass="head1 con1">
+						<h:inputText styleClass="largeinput" value="#{_impuesto.descripcion}"
+							>
+							<f:ajax event="change" render="listaImpuestos" />
+						</h:inputText>
+					</p:column>
+
+					<p:column headerText="Tipo de Impuesto" styleClass="head0 con0">
+						<h:outputText value="#{_impuesto.impuesto.codigo}" />
+					</p:column>
+
+					<p:column headerText="Importe" styleClass="head1 con1">
+						<h:inputText id="importeImpuesto"
+							value="#{_impuesto.importe}"
+							styleClass="autonumeric autonumeric-currency"
+							style="text-align: right;"
+							>
+							<f:ajax event="change" listener="#{controller.onImpuestoImporteChanged(_impuesto)}"
+								render="importeImpuesto :admNotaCreditoForm:importeTotalImpuesto" />
+							<f:convertNumber type="currency" locale="es-AR" currencySymbol="" />
+						</h:inputText>
+					</p:column>
+
+					<p:column styleClass="head0 con0"
+						rendered="#{reglasVisualizacion.mostrar(controller.notaCredito.estado, perfilUsuario, 'VER')
+									and controller.proveedorHabilitado}"
+                        style="text-align: center;">
+						<p:commandLink action="#{controller.eliminarImpuesto(_impuesto)}" value="Eliminar"
+							update=":admNotaCredito"
+							onclick="if(!confirm('¿Está seguro que desea eliminar el item de la nota de crédito?')) return false;" />
+					</p:column>
+				</p:dataTable>
+
+				<h:panelGroup id="importeTotalImpuesto" style="float: right; margin: 0 10px 10px;">
+					<h:outputText value="Importe Total: " style="font-weight: bold;" />
+					<h:outputText value="#{controller.importeTotalImpuestos}">
+						<f:convertNumber type="currency" locale="es-AR" currencySymbol="" />
+					</h:outputText>
+				</h:panelGroup>
+				<p:commandButton value="Agregar" update=":impuestoNCDialogForm"
+					action="#{controller.abrirPopUpImpuesto}"
+					oncomplete="PF('dlgPopUpImpuesto').show();"
+					rendered="#{reglasVisualizacion.mostrar(controller.notaCredito.estado, perfilUsuario, 'VER')
+								and controller.proveedorHabilitado}"
+					styleClass="stdbtn" style="margin: 6px 0 16px;" />
+				<br clear="all" />
+				
+				
+				<!-- ADJUNTOS -->
+				<div class="contenttitle">
+					<h2 class="list">
+						<span>Adjuntos</span>
+					</h2>
+				</div>
+				
+				<h:panelGroup id="adjuntos" rendered="#{not controller.new}">
+
+                    <p:fileUpload fileUploadListener="#{controller.agregarAdjunto}"
+                                  mode="advanced"
+                                  auto="true"
+                                  update="adjuntos"
+                                  immediate="true"
+                                  rendered="#{reglasVisualizacion.mostrar(controller.notaCredito.estado, perfilUsuario, 'VER')
+									and controller.proveedorHabilitado}"
+                                  label="Seleccionar"
+                                  sizeLimit="5242880"
+                                  invalidSizeMessage="El tamaño del archivo excede el máximo permitido de 5 MB"
+                                  invalidFileMessage="El tipo de archivo es inválido"
+                                  style="display: block; overflow: hidden; margin: 2px 0;"
+                                  onstart="PF('dlgAjaxLoading').show()"
+                                  oncomplete="PF('dlgAjaxLoading').hide()"
+                                  onerror="PF('dlgAjaxLoading').hide()"
+                                  styleClass="ui-fileupload-browserbuttononly" />
+
+					<p:dataTable id="listaAdjuntos" var="_adjunto" value="#{controller.adjuntos}"
+						emptyMessage="No hay registros cargados." styleClass="stdtable">
+
+						<p:column headerText="Nombre" styleClass="head0 con0">
+							<p:commandLink action="#{controller.descargarAdjunto(_adjunto)}" 
+								value="#{_adjunto.nombre}"
+								title="Descargar archivo"
+								immediate="true" ajax="false" />
+						</p:column>
+
+						<p:column headerText="Fecha" styleClass="head1 con1" style="text-align: center;">
+							<h:outputText value="#{_adjunto.fechaCreacion}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+
+						<p:column headerText="Tamaño" styleClass="head0 con0" style="text-align: right;">
+							<h:outputText value="#{controller.getCantidadBytes(_adjunto.size)}" />
+						</p:column>
+						
+						<p:column styleClass="head1 con1"
+							rendered="#{reglasVisualizacion.mostrar(controller.notaCredito.estado, perfilUsuario, 'VER')
+								and controller.proveedorHabilitado}"
+                            style="text-align: center;">
+							<p:commandLink action="#{controller.eliminarAdjunto(_adjunto)}"
+								onclick="if(!confirm('¿Está seguro que desea eliminar el archivo adjunto seleccionado?')) return false;"
+								update=":admNotaCreditoForm:adjuntos" value="Eliminar" />
+						</p:column>
+					</p:dataTable>
+				</h:panelGroup>
+				<h:panelGroup rendered="#{controller.new}">
+					<small class="desc no-margin-left">* Para poder agregar Adjuntos debe primero guardar la nota de crédito.</small>
+				</h:panelGroup>
+				
+				<br clear="all" />
+				
+				<!-- ESTADO FACTURA -->
+				<h:panelGroup rendered="#{not controller.new}">
+					<div class="contenttitle">
+						<h2 class="form">
+							<span>Estado</span>
+						</h2>
+					</div>
+					<div class="stdform-content">
+                        <h:panelGroup rendered="#{not controller.canShowEstadoMotivo()}">
+                            <div class="one_half">
+                                <h:outputLabel value="Estado" />
+                                <span class="field">
+                                    <h:outputText value="#{controller.notaCredito.estado.nombre}#{controller.notaCredito.estadoEbs != null ? ' - '.concat(controller.notaCredito.estadoEbs.nombre) : ''}"
+                                                  styleClass="uneditable-input uneditable-input-disabled" />
+                                </span>
+                            </div>
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{controller.canShowEstadoMotivo()}">
+                            <div class="one_third">
+                                <h:outputLabel value="Estado" />
+                                <span class="field">
+                                    <h:outputText value="#{controller.notaCredito.estado.nombre}#{controller.notaCredito.estadoEbs != null ? ' - '.concat(controller.notaCredito.estadoEbs.nombre) : ''}"
+                                                  styleClass="uneditable-input uneditable-input-disabled" />
+                                </span>
+                            </div>
+                            <div class="two_third last">
+                                <h:outputLabel value="Motivo" />
+                                <span class="field">
+                                    <h:outputText value="#{controller.estadoActual.comentario}"
+                                                  styleClass="uneditable-input uneditable-input-disabled"
+                                                  style="white-space: normal;" />
+                                </span>
+                            </div>
+                        </h:panelGroup>
+						<br clear="all"/>
+					</div>
+				</h:panelGroup>
+				
+				<h:panelGroup rendered="#{perfilUsuario == perfilProveedor}">
+					<h:panelGroup
+						rendered="#{reglasVisualizacion.mostrar(controller.notaCredito.estado, perfilUsuario, 'VER')
+									and controller.proveedorHabilitado and controller.isNew()}">
+						<p:commandButton action="#{controller.volver}"
+							value="Volver" update=":panelControl" styleClass="stdbtn"
+							style="float: right;" />
+						<p:commandButton action="#{controller.guardar}"
+							value="Guardar" update=":panelControl" styleClass="stdbtn" />
+						<br clear="all" />
+					</h:panelGroup>
+
+					<h:panelGroup
+						rendered="#{reglasVisualizacion.mostrar(controller.notaCredito.estado, perfilUsuario, 'VER')
+									and controller.proveedorHabilitado and not controller.isNew()}">
+						<p:commandButton action="#{controller.volver}"
+							value="Volver" update=":panelControl" styleClass="stdbtn"
+							style="float: right;" />
+						<p:commandButton action="#{controller.guardar}"
+							value="Guardar" update=":panelControl" styleClass="stdbtn" />
+						<p:commandButton action="#{controller.eliminar}"
+							value="Eliminar" update=":panelControl" styleClass="stdbtn"
+							onclick="if(!confirm('¿Está seguro que desea eliminar la nota de crédito?')) return false;" />
+						<p:commandButton action="#{controller.enviar}"
+							value="Enviar" update=":panelControl" styleClass="stdbtn"
+							onclick="if(!confirm('¿Está seguro que desea enviar la nota de crédito?')) return false;" />
+						<br clear="all" />
+					</h:panelGroup>
+
+			<!--		<h:panelGroup
+						rendered="#{not reglasVisualizacion.mostrar(controller.notaCredito.estado, perfilUsuario, 'VER')}">
+						<p:commandButton action="#{controller.volver}"
+							value="Volver" update=":panelControl" styleClass="stdbtn"
+							style="float: right;" />
+						<br clear="all" />
+					</h:panelGroup> -->
+					
+				</h:panelGroup>
+			</h:panelGroup>
+		</h:form>
+	</p:outputPanel>
+	
+	
+	<!-- POP-UP FACTURA -->
+	<p:dialog widgetVar="dlgPopUpLinea" header="Agregar Items"
+              showEffect="fade" hideEffect="fade" resizable="true" modal="true" dynamic="true"
+              onShow="PF('dlgPopUpLinea').initPosition();">
+		<h:form id="lineasNCDialogForm" styleClass="stdform">
+		
+			<h:outputText value="No hay Items disponibles para agregar"
+				rendered="#{empty controller.lineasDisponibles}" />
+			
+			<h:panelGroup rendered="#{not empty controller.lineasDisponibles}">
+	
+				<p:dataTable id="lineasDisponibles" var="_linea" value="#{controller.lineasDisponibles}"
+					paginator="true" rows="5" emptyMessage="No hay registros cargados."
+					paginatorPosition="bottom"
+                    paginatorAlwaysVisible="false"
+					paginatorTemplate=" {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
+					styleClass="stdtable">
+					
+					<p:column styleClass="head0 con0">
+						<f:facet name="header">
+							<h:outputText value="Sel." title="Seleccionar" />
+						</f:facet>
+						<h:selectBooleanCheckbox value="#{controller.lineasDisponiblesSeleccionadas[_linea]}"
+                                disabled="#{_linea.importe le 0}" />
+					</p:column>
+
+                    <p:column headerText="Línea" styleClass="head1 con1" style="text-align: center;">
+                        <h:outputText value="#{_linea.numero}">
+                            <f:convertNumber integerOnly="true" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Línea OC" styleClass="head0 con0" style="text-align: center;">
+                        <h:outputText value="#{_linea.lineaOrdenCompra.numeroLinea}">
+                            <f:convertNumber integerOnly="true" />
+                        </h:outputText>
+                    </p:column>
+
+					<p:column headerText="Descripción" styleClass="head1 con1">
+						<h:outputText value="#{_linea.descripcion}" />
+					</p:column>
+	
+					<p:column styleClass="head0 con0" style="text-align: center;">
+						<f:facet name="header">
+							<h:outputText value="UM" title="Unidad de Medida" />
+						</f:facet>
+						<h:outputText value="#{_linea.lineaOrdenCompra.unidadMedida}" />
+					</p:column>
+	
+					<p:column styleClass="head1 con1">
+						<f:facet name="header">
+							<h:outputText value="Nota al Prov." title="Nota al Proveedor" />
+						</f:facet>
+						<h:outputText value="#{_linea.lineaOrdenCompra.notaAlProveedor}" />
+					</p:column>
+	
+					<p:column styleClass="head0 con0" style="text-align: right;">
+						<f:facet name="header">
+							<h:outputText value="Precio U." title="Precio Unitario" />
+						</f:facet>
+						<h:outputText value="#{_linea.lineaOrdenCompra.precioUnitario}">
+							<f:convertNumber type="currency" locale="es-AR" currencySymbol="" />
+						</h:outputText>
+					</p:column>
+	
+					<p:column styleClass="head1 con1" style="text-align: right;">
+						<f:facet name="header">
+							<h:outputText value="Cant." title="Cantidad" />
+						</f:facet>
+						<h:outputText value="#{_linea.cantidad}">
+							<f:convertNumber type="number" maxFractionDigits="5" locale="es-AR" />
+						</h:outputText>
+					</p:column>
+	
+					<p:column headerText="Importe" styleClass="head0 con0" style="text-align: center;">
+						<h:outputText value="#{_linea.importe}">
+							<f:convertNumber type="currency" locale="es-AR" currencySymbol="" />
+						</h:outputText>
+					</p:column>
+
+				</p:dataTable>
+				
+				<br />
+	
+				<p:commandButton value="Agregar" action="#{controller.agregarItems}"
+					onclick="PF('dlgPopUpLinea').hide();" update=":admNotaCredito" styleClass="stdbtn" />
+				<p:commandButton value="Cancelar" onclick="PF('dlgPopUpLinea').hide();" styleClass="stdbtn" />
+			</h:panelGroup>
+		</h:form>
+	</p:dialog>
+	
+	
+	<!-- POP-UP IMPUESTO -->
+	<p:dialog widgetVar="dlgPopUpImpuesto" header="Agregar Items Impuesto" showEffect="fade" hideEffect="fade" resizable="true" modal="true" dynamic="true" onShow="PF('dlgPopUpImpuesto').initPosition();">
+		<h:form id="impuestoNCDialogForm" styleClass="stdform">
+			<h:panelGroup rendered="#{controller.operacionDeImpuestoDialog}">
+				<h:panelGroup rendered="#{controller.setOperacionDeImpuestoDialogFalse()}"></h:panelGroup>
+				<p:messages for="mensajesImpuestoDialog" id="mensajesImpuesto" />
+			</h:panelGroup>
+			
+			<small class="desc no-margin-left">Los campos indicados con (*) son obligatorios.</small>
+			
+			<div class="one_third last" style="width: 300px;">
+				<h:outputLabel value="Tipo Impuesto *" />
+				<span class="field">
+					<h:selectOneMenu value="#{controller.nombreImpSeleccionado}">
+						<f:selectItems value="#{controller.tipoImpuestos}" var="impuesto" itemValue="#{impuesto.codigo}"
+							itemLabel="#{impuesto.codigo}" />
+					</h:selectOneMenu>
+				</span>
+			</div>
+			<br clear="all" />
+			<div class="one_third last" style="width: 300px;">
+				<h:outputLabel value="Importe *" />
+				<span class="field">
+					<h:inputText value="#{controller.nuevoItemImpuesto.importe}"
+						styleClass="autonumeric autonumeric-currency" style="text-align: right;">
+						<f:convertNumber type="currency" locale="es-AR" currencySymbol="" />
+					</h:inputText>
+				</span>
+			</div>
+			<br clear="all" />
+			<div class="one_third last" style="width: 300px;">
+				<h:outputLabel value="Descripcion *" />
+				<span class="field">
+					<h:inputText value="#{controller.nuevoItemImpuesto.descripcion}" />
+				</span>
+			</div>
+			<br clear="all" />
+			
+			<p:commandButton value="Agregar" action="#{controller.agregarItemImpuesto}"
+				update=":admNotaCreditoForm:listaImpuestos, :admNotaCreditoForm:importeTotalImpuesto, impuestoNCDialogForm" styleClass="stdbtn" />
+			<p:commandButton value="Cancelar" onclick="PF('dlgPopUpImpuesto').hide();" styleClass="stdbtn" />
+		</h:form>
+	</p:dialog>
+	
+<script type="text/javascript">
+jQuery(function($){
+	$('#admNotaCredito').parent()
+		.on('focus', '.autonumeric', function() {
+			var $this = $(this);
+			if (typeof ($this.data('autoNumeric')) !== 'object') {
+				var options = {};
+				if ($this.hasClass('autonumeric-currency'))
+					options = {aSep: '.', aDec: ','};
+				else if ($this.hasClass('autonumeric-quantity'))
+					options = {aSep: '.', aDec: ',', mDec: 5, aPad: false};
+				var value = $this.val();
+				$this.autoNumeric('init', options).val(value);
+			}
+		});
+});
+</script>
+
+</ui:composition>

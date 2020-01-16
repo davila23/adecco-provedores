@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/defaultNoRight.xhtml">
+	
+	<ui:param name="action" value="#{listadoProveedoresImpuestosAction}" />
+
+	<ui:define name="head">
+		<h:outputScript library="js" name="validacion.js" />
+	</ui:define>
+
+	<ui:define name="title">Listado Proveedores (Impuestos)</ui:define>
+
+	<ui:define name="content">
+		<h:panelGroup id="proveedoresImpuestos">
+			<h:panelGroup rendered="#{action.vistaActual('PROVEEDOR_LISTADO')}">
+				<ui:include src="/listadoProveedores.xhtml">
+					<ui:param name="parentAction" value="#{action}" />
+					<ui:param name="parentUpdate" value=":proveedoresImpuestos" />
+				</ui:include>
+			</h:panelGroup>
+			
+			<h:panelGroup rendered="#{action.vistaActual('PROVEEDOR_DETALLE')}">
+				<ui:include src="/panelProveedor.xhtml">
+					<ui:param name="parentAction" value="#{listadoProveedoresImpuestosAction}" />
+					<ui:param name="parentUpdate" value=":proveedoresImpuestos" />
+				</ui:include>
+			</h:panelGroup>
+			<h:panelGroup id="evaluarModificaciones"></h:panelGroup>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

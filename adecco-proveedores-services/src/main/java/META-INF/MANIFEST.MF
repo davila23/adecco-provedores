@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Class-Path: login-cliente-jar-4.2.0.Final.jar
+

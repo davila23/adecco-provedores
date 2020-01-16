@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/defaultNoRight.xhtml">
+
+
+<!--@elvariable id="controller" type="ar.com.adecco.proveedores.action.PROVEEDOR_LISTADOFacturasTesoreriaAction"-->
+<ui:param name="controller" value="#{listadoFacturasTesoreriaAction}" />
+
+<ui:define name="head">
+    <h:outputScript library="js" name="validacion.js" />
+</ui:define>
+
+<ui:define name="title">Listado Facturas (Tesorería)</ui:define>
+
+<ui:define name="content">
+    <h:panelGroup id="panelControl">
+        <h:panelGroup rendered="#{controller.vistaActual('LISTADO')}">
+            <h:panelGroup layout="block" styleClass="widgetbox">
+                <div class="title"><h2 class="tabbed"><span>Filtros</span></h2></div>
+                <div class="widgetcontent">
+                    <h:form styleClass="stdform">
+                        <div class="stdform-content">
+                            <div class="one_third">
+                                <h:outputLabel value="Compañía" />
+                                <span class="field">
+                                    <h:selectOneMenu value="#{controller.filter.companiaId}">
+                                        <f:selectItems
+                                            value="#{controller.companiasAdecco}"
+                                            var="_compania" itemValue="#{_compania.id}"
+                                            itemLabel="#{_compania.nombre}" />
+                                    </h:selectOneMenu>
+                                </span>
+                            </div>
+                            <div class="one_third">
+                                <h:outputLabel value="Proveedor" />
+                                <span class="field">
+                                    <h:inputText value="#{controller.filter.proveedorNombre}" />
+                                </span>
+                            </div>
+                            <div class="one_third last">
+                                <h:outputLabel value="CUIT" />
+                                <span class="field">
+                                    <p:inputMask mask="99-99999999-9" value="#{controller.filter.proveedorCuit}" />
+                                </span>
+                            </div>
+                            <br clear="all" />
+                            <div class="one_third">
+                                <h:outputLabel value="Fecha Desde" />
+                                <span class="field">
+                                    <p:calendar
+                                        value="#{controller.filter.fechaDesde}"
+                                        converterMessage="El formato del campo Fecha Desde debe ser dd/mm/aaaa"
+                                        pattern="dd/MM/yyyy">
+                                        <f:validator validatorId="validadorFecha" />
+                                    </p:calendar>
+                                </span>
+                            </div>
+                            <div class="one_third">
+                                <h:outputLabel value="Fecha Hasta" />
+                                <span class="field">
+                                    <p:calendar
+                                        value="#{controller.filter.fechaHasta}"
+                                        converterMessage="El formato del campo Fecha Hasta debe ser dd/mm/aaaa"
+                                        pattern="dd/MM/yyyy">
+                                        <f:validator validatorId="validadorFecha" />
+                                    </p:calendar>
+                                </span>
+                            </div>
+                            <br clear="all" />
+                            <div class="one_third">
+                                <h:outputLabel value="Número Desde" />
+                                <span class="field">
+                                    <p:inputMask mask="9999-99999999" value="#{controller.filter.numeroDesde}" />
+                                </span>
+                            </div>
+                            <div class="one_third">
+                                <h:outputLabel value="Número Hasta" />
+                                <span class="field">
+                                    <p:inputMask mask="9999-99999999" value="#{controller.filter.numeroHasta}" />
+                                </span>
+                            </div>
+                            <br clear="all" />
+                            <div class="one_third">
+                                <span class="field">
+                                    <p:commandButton styleClass="stdbtn" value="Buscar"
+                                        action="#{controller.buscar}"
+                                        update=":panelControl"
+                                        oncomplete="if (typeof PF('tablaFacturasWV') !== 'undefined') PF('tablaFacturasWV').getPaginator().setPage(0);" />
+                                </span>
+                            </div>
+                            <br clear="all" />
+                        </div>
+                    </h:form>
+                </div>
+            </h:panelGroup>
+
+            <h:form id="listadoForm" styleClass="stdform">
+                <h:panelGroup>
+                    <!--@elvariable id="_facturaEbs" type="ar.com.adecco.dominio.ebs.ap.Factura"-->
+                    <p:dataTable id="factura" widgetVar="tablaFacturasWV" var="_facturaEbs"
+                        value="#{controller.facturas}"
+                        selection="#{controller.selectedFacturas}"
+                        rowSelectMode="none"
+                        paginator="true" rows="10"
+                        paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                        currentPageReportTemplate="Mostrando {startRecord} a {endRecord} de {totalRecords} registros"
+                        rowsPerPageTemplate="10,20,50"
+                        emptyMessage="No se encontraron comprobantes para los filtros indicados."
+                        paginatorAlwaysVisible="false"
+                        paginatorPosition="bottom"
+                        styleClass="stdtable">
+
+                        <p:column selectionMode="multiple" style="width: 18px;"
+                            styleClass="input-ignorar-cambios head0 con0" />
+
+                        <p:column styleClass="head1 con1" style="text-align: center;">
+                            <f:facet name="header">
+                                <h:outputText value="Número" />
+                            </f:facet>
+                            <p:commandLink value="#{_facturaEbs.tipoComprobante} #{_facturaEbs.letra}-#{_facturaEbs.numero}"
+                                action="#{controller.administracionFactura(_facturaEbs.id)}"
+                                update=":panelControl" />
+                            <f:facet name="footer">
+                                <h:outputText value="Número" />
+                            </f:facet>
+                        </p:column>
+
+                        <p:column styleClass="head0 con0" style="text-align: center;">
+                            <f:facet name="header">
+                                <h:outputText value="Fecha" />
+                            </f:facet>
+                            <h:outputText value="#{_facturaEbs.fecha}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                            <f:facet name="footer">
+                                <h:outputText value="Fecha" />
+                            </f:facet>
+                        </p:column>
+
+                        <p:column styleClass="head1 con1">
+                            <f:facet name="header">
+                                <h:outputText value="Proveedor" />
+                            </f:facet>
+                            <h:outputText value="#{_facturaEbs.proveedor.nombre}" />
+                            <f:facet name="footer">
+                                <h:outputText value="Proveedor" />
+                            </f:facet>
+                        </p:column>
+
+                        <p:column styleClass="head0 con0" style="text-align: center;">
+                            <f:facet name="header">
+                                <h:outputText value="CUIT" />
+                            </f:facet>
+                            <h:outputText value="#{_facturaEbs.proveedor.numero}" />
+                            <f:facet name="footer">
+                                <h:outputText value="CUIT" />
+                            </f:facet>
+                        </p:column>
+
+                        <p:column styleClass="head1 con1" style="text-align: right;">
+                            <f:facet name="header">
+                                <h:outputText value="Importe" />
+                            </f:facet>
+                            <h:outputText value="#{_facturaEbs.importe}">
+                                <f:convertNumber type="currency" currencySymbol="" />
+                            </h:outputText>
+                            <f:facet name="footer">
+                                <h:outputText value="Importe" />
+                            </f:facet>
+                        </p:column>
+
+                        <p:column styleClass="head0 con0" style="text-align: right;">
+                            <f:facet name="header">
+                                <h:outputText value="Saldo" />
+                            </f:facet>
+                            <h:outputText value="#{_facturaEbs.saldo}">
+                                <f:convertNumber type="currency" currencySymbol="" />
+                            </h:outputText>
+                            <f:facet name="footer">
+                                <h:outputText value="Importe" />
+                            </f:facet>
+                        </p:column>
+                    </p:dataTable>
+                    <br />
+                    
+                    <div style="float: left;">
+                        <h:outputText value="Chequera *" style="margin-right: 10px;" />
+                        <h:selectOneMenu value="#{controller.chequera}"
+                            converter="chequeraConverter" style="margin-right: 10px;">
+                            <f:selectItem itemLabel="Seleccionar..." itemValue="#{null}" />
+                            <f:selectItems value="#{controller.obtenerChequeras()}"
+                                var="_chequera" itemLabel="#{_chequera.nombre}" />
+                        </h:selectOneMenu>
+                    </div>
+                    <div style="float: left;">
+                        <h:outputText value="Fecha de Pago *" style="margin-right: 10px;"/>
+                        <p:calendar value="#{controller.fechaPago}"
+                            converterMessage="El formato del campo Fecha de Pago debe ser dd/mm/aaaa"
+                            pattern="dd/MM/yyyy" style="margin-right: 10px; width: 70px;">
+                            <f:validator validatorId="validadorFecha" />
+                        </p:calendar>
+                    </div>
+                    <p:commandButton
+                        styleClass="stdbtn" value="Pagar..."
+                        action="#{controller.showPagarComprobantes()}"
+                        update=":pagarComprobantesForm"
+                        oncomplete="if (!args.failed) {PF('pagarComprobantesPopup').show()}" />
+                    <br clear="all" />
+                </h:panelGroup>
+            </h:form>
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{controller.vistaActual('FACTURA')}">
+            <ui:include src="/administracionFacturaEbs.xhtml" >
+                <ui:param name="perfil" value="TESORERIA" />
+            </ui:include>
+            
+            <h:form styleClass="stdform" id="botoneraForm">
+                <p:commandButton action="#{controller.volver}"
+                    value="Volver" styleClass="stdbtn"
+                    update=":panelControl"
+                    style="float: right;" />
+
+                <h:panelGroup rendered="#{administracionFacturaEbsAction.facturaSeleccionada.tipoFactura == 'STANDARD'}">
+                    <div style="float: left;">
+                        <h:outputText value="Chequera *" style="margin-right: 10px;" />
+                        <h:selectOneMenu value="#{controller.chequera}"
+                                         converter="chequeraConverter" style="margin-right: 10px;">
+                            <f:selectItem itemLabel="Seleccionar..." itemValue="#{null}" />
+                            <f:selectItems value="#{controller.obtenerChequeras}"
+                                           var="_chequera" itemLabel="#{_chequera.nombre}" />
+                        </h:selectOneMenu>
+                    </div>
+                    <div style="float: left;">
+                        <h:outputText value="Fecha de Pago *" style="margin-right: 10px;"/>
+                        <p:calendar value="#{controller.fechaPago}"
+                                    converterMessage="El formato del campo Fecha de Pago debe ser dd/mm/aaaa"
+                                    pattern="dd/MM/yyyy" style="margin-right: 10px; width: 70px;">
+                            <f:validator validatorId="validadorFecha" />
+                        </p:calendar>
+                    </div>
+                    <p:commandButton
+                            styleClass="stdbtn" value="Pagar"
+                            action="#{controller.pagarFactura}"
+                            onstart="return confirm('Se realizará el pago del comprobante. ¿Desea continuar?');"
+                            update=":panelControl" />
+                </h:panelGroup>
+                <br clear="all" />
+            </h:form>
+        </h:panelGroup>
+
+
+        <p:dialog widgetVar="pagarComprobantesPopup" header="Pagar Comprobantes"
+                  showEffect="fade" hideEffect="fade" resizable="false" modal="true" dynamic="true" width="500px"
+                  onShow="PF('pagarComprobantesPopup').initPosition();">
+            <h:form id="pagarComprobantesForm" styleClass="stdform">
+
+                Se realizarán los siguientes pagos:
+
+                <p:dataTable var="proveedor" value="#{controller.selectedProveedores}"
+                             scrollable="true" scrollHeight="300"
+                             emptyMessage="No ha seleccionado ningún comprobante.">
+
+                    <p:columnGroup type="header">
+                        <p:row>
+                            <p:column headerText="Comprobante" />
+                            <p:column headerText="Saldo" />
+                        </p:row>
+                    </p:columnGroup>
+
+                    <!--@elvariable id="comprobanteToPay" type="ar.com.adecco.dominio.ebs.ap.Factura"-->
+                    <p:subTable var="comprobanteToPay" value="#{controller.getSelectedComprobantesByProveedor(proveedor)}">
+                        <f:facet name="header">
+                            <h:outputText value="#{proveedor.nombre}" />
+                        </f:facet>
+                        <p:column>
+                            <h:outputText value="#{comprobanteToPay.tipoLetraNumero}" />
+                        </p:column>
+                        <p:column style="text-align: right;">
+                            <h:outputText value="#{comprobanteToPay.saldo}">
+                                <f:convertNumber type="currency" currencySymbol="" />
+                            </h:outputText>
+                        </p:column>
+                        <p:columnGroup type="footer">
+                            <p:row>
+                                <p:column footerText="Total: " style="text-align: right;"/>
+                                <p:column style="text-align: right;">
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{controller.getSaldoAPagarByProveedor(proveedor)}">
+                                            <f:convertNumber type="currency" currencySymbol="" />
+                                        </h:outputText>
+                                    </f:facet>
+                                </p:column>
+                            </p:row>
+                        </p:columnGroup>
+                    </p:subTable>
+                </p:dataTable>
+
+                <div>
+                    <p:commandButton value="Pagar" action="#{controller.pagarComprobantes()}"
+                                     update=":panelControl"
+                                     onstart="PF('pagarComprobantesPopup').hide(); return true;"
+                                     styleClass="stdbtn" />
+                    <p:commandButton value="Cancelar" onclick="PF('pagarComprobantesPopup').hide();" styleClass="stdbtn" />
+                </div>
+            </h:form>
+        </p:dialog>
+
+    </h:panelGroup>
+</ui:define>
+</ui:composition>

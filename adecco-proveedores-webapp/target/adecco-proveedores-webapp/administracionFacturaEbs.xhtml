@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui">
+
+	<p:outputPanel id="admFactura">
+
+        <!--@elvariable id="perfilUsuario" type="ar.com.adecco.proveedores.model.Perfil"-->
+		<ui:param name="perfilUsuario" value="#{administracionFacturaEbsAction.perfilUsuario}" />
+        <!--@elvariable id="perfilProveedor" type="ar.com.adecco.proveedores.model.Perfil"-->
+		<ui:param name="perfilProveedor" value="#{administracionFacturaEbsAction.perfilProveedor}" />
+
+		<h:form styleClass="stdform" id="administracionFacturaForm">
+
+			<!-- EDICION FACTURA - CONSULTA -->
+			<h:panelGroup>
+				
+				<!-- HEADER FACTURA -->
+				<div class="contenttitle">
+					<h2 class="form">
+						<span>Detalle de #{
+						        administracionFacturaEbsAction.facturaSeleccionada.tipoComprobante == 'FC' ? 'Factura' :
+                                administracionFacturaEbsAction.facturaSeleccionada.tipoComprobante == 'NC' ? 'Nota de Crédito' :
+                                administracionFacturaEbsAction.facturaSeleccionada.tipoComprobante == 'ND' ? 'Nota de Débito' : 'Comprobante'}</span>
+					</h2>
+				</div>
+
+				<div class="stdform-content">
+					<div class="one_half">
+						<h:outputLabel value="Número *" />
+						<span class="field">
+							<p:inputMask mask="9999-99999999"
+								value="#{administracionFacturaEbsAction.facturaSeleccionada.numero}"
+								disabled="true" />
+						</span>
+					</div>
+					<div class="one_half last">
+						<h:outputLabel value="Estado de Pago" />
+						<span class="field">
+							<h:inputText value="#{administracionFacturaEbsAction.facturaSeleccionada.estadoPago}"
+								disabled="true" />
+						</span>
+					</div>
+					<br clear="all" />
+					<div class="one_half">
+						<h:outputLabel value="Fecha *" />
+						<span class="field">
+							<p:calendar id="calendarFecha"
+								value="#{administracionFacturaEbsAction.facturaSeleccionada.fecha}"
+								converterMessage="El formato del campo fecha debe ser dd/mm/aaaa" pattern="dd/MM/yyyy"
+								disabled="true">
+								<p:ajax event="change" update="calendarFecha" />
+								<p:ajax event="dateSelect" update="calendarFecha" />
+								<f:validator validatorId="validadorFecha" />
+							</p:calendar>
+						</span>
+					</div>
+					<div class="one_half last">
+						<h:outputLabel value="Importe *" />
+						<span class="field">
+							<h:inputText styleClass="autonumeric autonumeric-currency" style="text-align: right;"
+								value="#{administracionFacturaEbsAction.facturaSeleccionada.importe}"
+								disabled="true">
+								<f:convertNumber type="currency" locale="es-AR" currencySymbol="" />
+							</h:inputText>
+						</span>
+					</div>
+					<br clear="all" />
+					<div class="one_half">
+						<h:outputLabel value="Letra *" />
+						<span class="field">
+							<h:selectOneMenu id="comboLetra" value="#{administracionFacturaEbsAction.facturaSeleccionada.letra}"
+								disabled="true">
+								<f:selectItems value="#{administracionFacturaEbsAction.comboLetras}" var="letra" itemLabel="#{letra.letra}"
+									itemValue="#{letra.letra}" />
+								<p:ajax event="change" update="comboLetra" />
+							</h:selectOneMenu>
+						</span>
+					</div>
+					<div class="one_half last">
+						<h:outputLabel value="Compañía" />
+						<span class="field">
+							<h:inputText disabled="true"
+								value="#{administracionFacturaEbsAction.facturaSeleccionada.compania.nombre}" />
+						</span>
+					</div>
+					<br clear="all" />
+					<div class="one_half ">
+						<h:outputLabel value="Nro CAE *" />
+						<span class="field">
+							<h:inputText value="#{administracionFacturaEbsAction.facturaSeleccionada.cae}"
+								maxlength="14"
+								disabled="true" />
+						</span>
+					</div>
+					<div class="one_half last">
+						<h:outputLabel class="twolines">Fecha Vencimiento <br />CAE *</h:outputLabel>
+						<span class="field">
+							<h:inputText value="#{administracionFacturaEbsAction.formatAdeccoEbsDate(administracionFacturaEbsAction.facturaSeleccionada.fechaVencimientoCae)}"
+								disabled="true" />
+						</span>
+					</div>
+					<br clear="all" />
+				</div>
+
+				<!-- DETAIL FACTURA -->
+				<div class="contenttitle">
+					<h2 class="list">
+						<span>Items</span>
+					</h2>
+				</div>
+				
+				<p:dataTable id="listaLineas" var="_linea" value="#{administracionFacturaEbsAction.listaLineas}"
+					emptyMessage="No hay registros cargados." styleClass="stdtable">
+
+					<p:column headerText="Nro." styleClass="head0 con0" style="text-align: center;">
+						<h:outputText value="#{_linea.linea}" />
+					</p:column>
+
+					<p:column headerText="Línea OC" styleClass="head1 con1" style="text-align: center;">
+						<h:outputText value="#{_linea.distribucionOrdenCompra.lineaOrdenCompra.numeroLinea}">
+							<f:convertNumber integerOnly="true" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Descripción" styleClass="head0 con0">
+						<h:outputText value="#{_linea.descripcion}" />
+					</p:column>
+
+					<p:column styleClass="head1 con1" style="text-align: center;">
+						<f:facet name="header">
+							<h:outputText value="UM" title="Unidad de Medida" />
+						</f:facet>
+						<h:outputText value="#{_linea.distribucionOrdenCompra.lineaOrdenCompra.unidadMedida}" />
+					</p:column>
+
+					<p:column styleClass="head0 con0">
+						<f:facet name="header">
+							<h:outputText value="Nota al Prov." title="Nota al Proveedor" />
+						</f:facet>
+						<h:outputText value="#{_linea.distribucionOrdenCompra.lineaOrdenCompra.notaAlProveedor}" />
+					</p:column>
+
+					<p:column styleClass="head1 con1" style="text-align: right;">
+						<f:facet name="header">
+							<h:outputText value="Precio U." title="Precio Unitario" />
+						</f:facet>
+						<h:outputText value="#{_linea.distribucionOrdenCompra.lineaOrdenCompra.precioUnitario}">
+							<f:convertNumber type="currency" locale="es-AR" currencySymbol="" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Importe" styleClass="head0 con0" style="text-align: center;">
+						<h:inputText id="importe"
+							value="#{_linea.importe}"
+							styleClass="autonumeric autonumeric-currency" style="text-align: right; width: 100px;"
+							disabled="true">
+							<f:convertNumber type="currency" locale="es-AR" currencySymbol="" />
+						</h:inputText>
+					</p:column>
+				</p:dataTable>
+				
+				<h:panelGroup id="importeTotal" style="float: right; margin: 0 10px 10px;">
+					<h:outputText value="Importe Total: " style="font-weight: bold;" />
+					<h:outputText value="#{administracionFacturaEbsAction.importeTotalLineas}">
+						<f:convertNumber type="currency" locale="es-AR" currencySymbol="" />
+					</h:outputText>
+				</h:panelGroup>
+				<br clear="all" />
+				
+				
+				<!-- DETAIL IMPUESTO -->
+				<div class="contenttitle">
+					<h2 class="list">
+						<span>Items Impuestos</span>
+					</h2>
+				</div>
+
+				<p:dataTable id="listaImpuestos" var="_impuesto" value="#{administracionFacturaEbsAction.listaImpuestos}"
+					emptyMessage="No hay registros cargados."
+					styleClass="stdtable">
+
+					<p:column headerText="Nro." styleClass="head0 con0" style="text-align: center;">
+						<h:outputText value="#{_impuesto.linea}" />
+					</p:column>
+
+					<p:column headerText="Descripción" styleClass="head1 con1">
+						<h:inputText styleClass="largeinput" value="#{_impuesto.descripcion}"
+							disabled="true">
+							<f:ajax event="change" render="listaImpuestos" />
+						</h:inputText>
+					</p:column>
+
+					<p:column headerText="Tipo de Impuesto" styleClass="head0 con0">
+						<h:outputText value="#{_impuesto.impuesto.codigo}" />
+					</p:column>
+
+					<p:column headerText="Importe" styleClass="head1 con1">
+						<h:inputText id="importeImpuesto"
+							value="#{_impuesto.importe}"
+							styleClass="autonumeric autonumeric-currency"
+							style="text-align: right;"
+							disabled="true">
+							<f:convertNumber type="currency" locale="es-AR" currencySymbol="" />
+						</h:inputText>
+					</p:column>
+				</p:dataTable>
+
+				<h:panelGroup id="importeTotalImpuesto" style="float: right; margin: 0 10px 10px;">
+					<h:outputText value="Importe Total: " style="font-weight: bold;" />
+					<h:outputText value="#{administracionFacturaEbsAction.importeTotalImpuestos}">
+						<f:convertNumber type="currency" locale="es-AR" currencySymbol="" />
+					</h:outputText>
+				</h:panelGroup>
+				<br clear="all" />
+				
+				
+				<!-- ADJUNTOS -->
+				<div class="contenttitle">
+					<h2 class="list">
+						<span>Adjuntos: Factura y Remitos</span>
+					</h2>
+				</div>
+				
+				<h:panelGroup rendered="#{not administracionFacturaEbsAction.existeEnProveedores}" styleClass="stdform-content" layout="block">
+					<h:outputText value="Esta factura no fue cargada desde la aplicación Proveedores." />
+				</h:panelGroup>
+				<h:panelGroup id="adjuntos" rendered="#{administracionFacturaEbsAction.existeEnProveedores}">
+					<p:dataTable id="listaAdjuntos" var="_adjunto" value="#{administracionFacturaEbsAction.adjuntos}"
+						emptyMessage="No hay registros cargados." styleClass="stdtable">
+
+						<p:column headerText="Nombre" styleClass="head0 con0">
+							<p:commandLink action="#{administracionFacturaEbsAction.descargarAdjunto(_adjunto)}" 
+								value="#{_adjunto.nombre}"
+								title="Descargar archivo"
+								immediate="true" ajax="false" />
+						</p:column>
+
+						<p:column headerText="Fecha" styleClass="head1 con1" style="text-align: center;">
+							<h:outputText value="#{_adjunto.fechaCreacion}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+
+						<p:column headerText="Tamaño" styleClass="head0 con0" style="text-align: right;">
+							<h:outputText value="#{administracionFacturaEbsAction.getCantidadBytes(_adjunto.size)}" />
+						</p:column>
+					</p:dataTable>
+				</h:panelGroup>
+				
+				<br clear="all" />
+			
+				<!-- ESTADO FACTURA -->
+				<div class="contenttitle">
+					<h2 class="form">
+						<span>Estado</span>
+					</h2>
+				</div>
+				<div class="stdform-content">
+					<h:panelGroup rendered="#{not administracionFacturaEbsAction.existeEnProveedores}">
+						<h:outputText value="Esta factura no fue cargada desde la aplicación Proveedores." />
+					</h:panelGroup>
+					<h:panelGroup rendered="#{administracionFacturaEbsAction.existeEnProveedores}">
+                        <div class="one_third">
+							<h:outputLabel value="Estado" />
+							<span class="field">
+								<h:inputText value="#{administracionFacturaEbsAction.facturaProveedores.estado.nombre}" 
+									disabled="true" />
+							</span>
+						</div>
+                        <div class="two_third last">
+							<h:panelGroup rendered="#{administracionFacturaEbsAction.facturaRechazada}">
+								<h:outputLabel value="Motivo" />
+								<span class="field">
+									<h:inputTextarea value="#{administracionFacturaEbsAction.estadoActual.comentario}" 
+										disabled="true" />
+								</span>
+							</h:panelGroup>
+						</div>
+						<br clear="all"/>
+					</h:panelGroup>
+				</div>
+				
+				<br />
+				
+			</h:panelGroup>
+		</h:form>
+	</p:outputPanel>
+	
+
+</ui:composition>

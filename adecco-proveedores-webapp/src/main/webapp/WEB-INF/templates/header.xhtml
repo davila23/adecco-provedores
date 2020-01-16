@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<!-- START OF HEADER -->
+	<script type="text/javascript">
+		var _global_theme = "http://agora.adecco.com.ar:4545/theme/agora/php/";
+	</script>
+	<script type="text/javascript" src='http://agora.adecco.com.ar:4545/theme/agora/php/js/moment.min.js'></script>
+	<script type="text/javascript">
+		moment.lang("es");
+	</script>
+	<script type="text/javascript" src='http://agora.adecco.com.ar:4545/theme/agora/php/js/plugins/jquery.dotdotdot.min.js'></script>
+	<script type="text/javascript" src='http://agora.adecco.com.ar:4545/theme/agora/php/js/header.js'></script>
+	<div class="header radius3">
+		<div class="headerinner">
+			<a href=""><img src="http://agora.adecco.com.ar:4545/theme/agora/php/images/logoAgora_small.png" alt="" /></a>
+			<div class="headright">
+				<div class="headercolumn"></div>
+				<!--headercolumn-->
+				<div id="notiPanel" class="headercolumn">
+
+					<div class="notiwrapper">
+						<h:form id="notimensajes">
+								<!--BoxPosts-->
+								<div class="boxPosts" style="float: left">
+									<a href="" class="notialert radius2" id="notialert"><span id="cantMensajes">-</span></a>
+									<span><img style="padding-left: 2px;" class="radius2" alt="" src="http://agora.adecco.com.ar:4545/theme/agora/php/images/icons/default/mail_white.png" /></span>
+								</div>
+								<!--/BoxPosts-->
+	
+								<!--BoxPostsAlertSystem-->
+								<div class="boxPosts" style="float: left; margin-left: 10px; display: none;">
+									<a class="notialertSystem radius2" style="background-color: inherit; border-color:inherit" href="">0</a> <span><img
+										src="http://agora.adecco.com.ar:4545/theme/agora/php/images/icons/default/alert_white.png" alt=""
+										class="radius2" style="padding-left: 2px;" /></span>
+								</div>
+								<!--/BoxPostsAlertSystem-->
+						
+							<h:panelGroup id="mensajesUsuario">
+								<div class="notibox">
+									<ul class="msglist" id="listMsgsUsuario"></ul>
+                                    <div class="msgmore"><a href="http://agora.adecco.com.ar:8080/agora/notificaciones.jsf">Ver todas las notificaciones</a></div>
+                                </div>
+							</h:panelGroup>
+						</h:form>
+						<!--notibox-->
+					</div>
+					<!--notiwrapper-->
+
+
+				</div>
+				<!--headercolumn-->
+				<div id="userPanel" class="headercolumn">
+					<a href="" class="userinfo radius2">
+						<img id="imgUsuario"
+                            src="http://agora.adecco.com.ar:4545/theme/agora/php/images/avatar.png"
+							alt="" 
+							width="25"
+							height="25"
+							class="radius2"
+							onerror="this.src='http://agora.adecco.com.ar:4545/theme/agora/php/images/avatar.png'" 
+						/>
+						<span id="nomyapusr"></span>
+					</a>
+					<div class="userdrop">
+						<ul>
+							<li><a href="http://agora.adecco.com.ar:8080/agora/organigrama.jsf" class="widgets">Perfil</a></li>
+							<li><a href="http://agora.adecco.com.ar:8080/agora/changePassword.jsf">Cambio de Contrase&#241;a</a></li>
+							<li>
+								<a href="https://agora.adecco.com.ar:8443/apps/logout">
+									<font color="red"><strong>Desconectar</strong></font>
+								</a>
+							</li>
+						</ul>
+					</div>
+					<!--userdrop-->
+				</div>
+				<!--headercolumn-->
+			</div>
+			<!--headright-->
+
+		</div>
+		<!--headerinner-->
+	</div>
+	<!--header-->
+
+	<!-- END OF HEADER -->
+</ui:composition>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/defaultNoRight.xhtml">
+
+    <!--@elvariable id="action" type="ar.com.adecco.proveedores.action.AdministracionProveedorAction"-->
+	<ui:param name="action" value="#{administracionProveedorAction}" />
+	<ui:remove>
+<!-- Se tienen que updatear todos los forms por el bug: http://balusc.blogspot.com.ar/2011/09/communication-in-jsf-20.html#AjaxRenderingOfContentWhichContainsAnotherForm -->
+	</ui:remove>
+	<ui:param name="update" value=":adminisitracionProveedor :adminisitracionProveedorForm :panelProveedorForm :panelProveedorMultilateralForm :panelProveedorAdjuntosForm" />
+	
+	<ui:define name="head">
+		<h:outputScript library="js" name="validacion.js" />
+	</ui:define>
+	
+	<ui:define name="title">Administración de Proveedores</ui:define>
+	
+	<ui:define name="content">
+		<h:panelGroup id="adminisitracionProveedor">
+			<h:form id="adminisitracionProveedorForm" styleClass="stdform">
+				<h:panelGroup layout="block" class="one_half" rendered="#{action.vistaActual('PROVEEDOR_LISTADO') and action.variosProveedores}">
+					<h:outputLabel value="Proveedor" for="proveedor"/>
+					<span class="field">
+						<h:selectOneMenu id="proveedor" value="#{action.proveedor}" converter="proveedorConverter" onchange="if (actionCancelar('panelProveedor')) { this.value = $(this).data('previous_value'); return false; } $(this).data('previous_value', this.value);">
+							<f:selectItem itemLabel="Seleccionar..." itemValue="#{null}" /> 
+						    <f:selectItems value="#{action.proveedores}"
+								var="item" itemLabel="#{item.razonSocial}" />
+							<f:ajax render="#{update}" listener="#{action.proveedorChanged}" onerror="function(data) {$(document).trigger('ajaxStop');}"
+								onevent="function(data) {if (data.status == 'begin') $(document).trigger('ajaxStart'); else if (data.status == 'success') $(document).trigger('ajaxStop');}" />
+						</h:selectOneMenu>
+					</span>
+<script type="text/javascript">
+$('#adminisitracionProveedorForm\\:proveedor').data('previous_value', $('#adminisitracionProveedorForm\\:proveedor').val());
+</script>
+				</h:panelGroup>
+				<h:panelGroup layout="block" class="one_half last" rendered="#{action.vistaActual('PROVEEDOR_LISTADO')}">
+					<p:commandButton value="Alta de Proveedor" 
+						action="#{action.initAltaProveedor}"
+						update=":adminisitracionProveedor" 
+						onclick="if(actionCancelar('panelProveedor')) return false;"
+						styleClass="stdbtn" />
+				</h:panelGroup>
+				<br clear="all"/>
+			</h:form>
+			
+			<h:panelGroup rendered="#{action.vistaActual('PROVEEDOR_DETALLE')}">
+				<ui:include src="/panelProveedor.xhtml">
+					<ui:param name="parentAction" value="#{action}" />
+					<ui:param name="parentUpdate" value="#{update}" />
+				</ui:include>
+				<script type="text/javascript"> init_validacion("panelProveedor"); </script>
+			</h:panelGroup>
+			<ui:include src="/validacion.xhtml">
+				<ui:param name="action" value="#{panelProveedorAction}" />
+				<ui:param name="formId" value="panelProveedor" />
+				<ui:param name="inicializar" value="#{false}" />
+			</ui:include>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

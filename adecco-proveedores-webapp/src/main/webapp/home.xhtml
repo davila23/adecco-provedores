@@ -1,0 +1,14 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                template="/WEB-INF/templates/defaultBasicContent.xhtml">
+
+    <ui:define name="content">
+        <h:outputText value="#{homeAction.html}" escape="false" rendered="#{homeAction.html != null}" />
+        <h:panelGroup rendered="#{homeAction.html == null}">
+            <h2>Bienvenido a Proveedores</h2>
+            <div style="height: 300px;">
+            </div>
+        </h:panelGroup>
+    </ui:define>
+</ui:composition>

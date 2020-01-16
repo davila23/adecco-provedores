@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    template="/WEB-INF/templates/defaultNoRight.xhtml">
+
+<!--@elvariable id="controller" type="ar.com.adecco.proveedores.action.PanelControlAction"-->
+<ui:param name="controller" value="#{panelControlAction}" />
+
+<ui:define name="head">
+    <h:outputScript library="js" name="validacion.js" />
+    <h:outputScript library="js" name="autoNumeric.min.js" />
+</ui:define>
+
+<ui:define name="title">Panel de Control</ui:define>
+
+<ui:define name="content">
+
+    <h:panelGroup id="panelControl">
+        <h:panelGroup rendered="#{controller.currentAccessIs('SIN_ACCESO')}">
+            <h:outputText value="No tiene acceso a esta pantalla, debe tener asociado algún proveedor." />
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{not controller.currentAccessIs('SIN_ACCESO')}">
+<!--
+            <h:form styleClass="stdform" rendered="#{panelControlAction.proveedores.size gt 1}">
+                <div class="one_half last">
+                    <h:outputLabel value="Proveedor"/>
+                    <span class="field">
+                        <h:selectOneMenu value="#{panelControlAction.proveedor}" converter="proveedorConverter"
+                                         onclick="if (actionCancelar()) return false;">
+                            <f:selectItem itemValue="#{null}" itemLabel="Seleccionar..." />
+                            <f:selectItems value="#{panelControlAction.proveedores}" var="proveedor" itemLabel="#{proveedor.razonSocial}" />
+                            <p:ajax event="change" update=":panelControl" listener="#{panelControlAction.onProveedorChanged}" />
+                        </h:selectOneMenu>
+                    </span>
+                </div>
+                <br clear="all"/>
+                <br />
+            </h:form> -->
+
+            <h:panelGroup rendered="#{controller.proveedor != null}">
+                <h:panelGroup rendered="#{controller.currentAccessIs('ACCESO_PENDIENTE')}">
+                    <h:outputText value="El proveedor se encuentra deshabilitado." rendered="#{controller.proveedor.estado == 'RECHAZADO'}" />
+                    <h:outputText value="El proveedor se encuentra pendiente de aprobación." rendered="#{controller.proveedor.estado != 'RECHAZADO'}" />
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{controller.currentAccessIs('ACCESSO_DETALLE')}">
+
+                    <h:panelGroup rendered="#{not controller.proveedorHabilitado}">
+                        <span style="font-weight: bold;">El proveedor se encuentra inhabilitado.</span>
+                        Si la fecha de vigencia caducó, para extenderla deberá actualizar sus datos y volver a enviarlos.
+                        <br />
+                    </h:panelGroup>
+
+                    <h:panelGroup rendered="#{controller.currentViewIs('PRINCIPAL')}">
+                        <ui:include src="/listadoOC.xhtml" />
+                        <br />
+                        <ui:include src="/listadoFacturasProveedor.xhtml" />
+                        <br />
+                        <ui:include src="/notasCreditoProveedor.xhtml" />
+                        <br />
+                        <ui:include src="/notasDebitoProveedor.xhtml" />
+                        <br />
+                    </h:panelGroup>
+
+                    <h:panelGroup rendered="#{controller.currentViewIs('ADM_OC')}">
+                        <ui:include src="/detalleOC.xhtml" />
+                    </h:panelGroup>
+
+                    <h:panelGroup rendered="#{controller.currentViewIs('ADM_FAC')}">
+                        <ui:include src="/administracionFactura.xhtml" />
+                    </h:panelGroup>
+
+                    <h:panelGroup rendered="#{controller.currentViewIs('ADM_NC')}">
+                        <ui:include src="/notaCreditoProveedor.xhtml" />
+                    </h:panelGroup>
+
+                    <h:panelGroup rendered="#{controller.currentViewIs('ADM_ND')}">
+                        <ui:include src="/notaDebitoProveedor.xhtml" />
+                    </h:panelGroup>
+                </h:panelGroup>
+            </h:panelGroup>
+        </h:panelGroup>
+    </h:panelGroup>
+</ui:define>
+</ui:composition>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="4a427835-321f-4cbd-b532-454323a7e7bb" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/adecco-proveedores-daos/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/adecco-proveedores-daos/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/adecco-proveedores-model/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/adecco-proveedores-model/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/adecco-proveedores-model/src/main/java/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/adecco-proveedores-model/src/main/java/META-INF/MANIFEST.MF" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/adecco-proveedores-parent/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/adecco-proveedores-parent/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/adecco-proveedores-webapp/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/adecco-proveedores-webapp/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/adecco-proveedores-webapp/src/main/java/ar/com/adecco/proveedores/datamodel/SimpleSelectableDataModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/adecco-proveedores-webapp/src/main/java/ar/com/adecco/proveedores/datamodel/SimpleSelectableDataModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/adecco-proveedores-webapp/src/main/java/ar/com/adecco/proveedores/utils/CustomSingleSignOutFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/adecco-proveedores-webapp/src/main/java/ar/com/adecco/proveedores/utils/CustomSingleSignOutFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/adecco-proveedores-webapp/src/main/java/ar/com/adecco/proveedores/utils/TransactionServletListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/adecco-proveedores-webapp/src/main/java/ar/com/adecco/proveedores/utils/TransactionServletListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/adecco-proveedores-webapp/src/main/resources/META-INF/orm.xml" beforeDir="false" afterPath="$PROJECT_DIR$/adecco-proveedores-webapp/src/main/resources/META-INF/orm.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/adecco-proveedores-webapp/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/adecco-proveedores-webapp/src/main/resources/META-INF/persistence.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/adecco-proveedores-webapp/src/main/resources/META-INF/services/javax.enterprise.inject.spi.Extension" beforeDir="false" afterPath="$PROJECT_DIR$/adecco-proveedores-webapp/src/main/resources/META-INF/services/javax.enterprise.inject.spi.Extension" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/adecco-proveedores-webapp/src/main/webapp/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/adecco-proveedores-webapp/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/adecco-proveedores-webapp/src/main/webapp/administracionFactura.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/adecco-proveedores-webapp/src/main/webapp/administracionFactura.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/adecco-proveedores-webapp/src/main/webapp/detalleOC.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/adecco-proveedores-webapp/src/main/webapp/detalleOC.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/adecco-proveedores-webapp/src/main/webapp/notaCreditoProveedor.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/adecco-proveedores-webapp/src/main/webapp/notaCreditoProveedor.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/adecco-proveedores-webapp/src/main/webapp/notaDebitoProveedor.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/adecco-proveedores-webapp/src/main/webapp/notaDebitoProveedor.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/adecco-proveedores-webapp/src/main/webapp/panelControl.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/adecco-proveedores-webapp/src/main/webapp/panelControl.xhtml" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1TRlR0wKgH90UBCuebGeqIo1MQk" />
+  <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4a427835-321f-4cbd-b532-454323a7e7bb" name="Default Changelist" comment="" />
+      <created>1573430776175</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1573430776175</updated>
+      <workItem from="1573430777898" duration="495000" />
+      <workItem from="1573832489335" duration="975000" />
+      <workItem from="1574277211506" duration="441000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

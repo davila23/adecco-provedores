@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui">
+
+	<p:outputPanel id="detalleOC">
+		<h:form id="formDetalleOC" styleClass="stdform">
+			
+			<div class="contenttitle">
+				<h2 class="form">
+					<span>Detalle Orden de Compra</span>
+				</h2>
+			</div>
+
+			<div class="stdform-content">
+				<div class="one_half">
+					<h:outputLabel value="Número" />
+					<span class="field">
+						<h:inputText value="#{detalleOCAction.ordenCompraSeleccionada.numero}" readonly="true">
+							<f:convertNumber type="number" integerOnly="true" />
+						</h:inputText>
+					</span>
+				</div>
+				<div class="one_half last">
+					<h:outputLabel value="Habilitada" />
+					<span class="field">
+						<h:inputText value="Si" rendered="#{detalleOCAction.ordenCompraSeleccionada.habilitado == 'Y'}" readonly="true" />
+						<h:inputText value="No" rendered="#{detalleOCAction.ordenCompraSeleccionada.habilitado != 'Y'}" readonly="true" />
+					</span>
+				</div>
+				<br clear="all" />
+				<div class="one_half">
+					<h:outputLabel value="Proveedor" />
+					<span class="field">
+						<h:inputText value="#{detalleOCAction.ordenCompraSeleccionada.proveedor.nombre}" readonly="true" />
+					</span>
+				</div>
+				<div class="one_half last">
+					<h:outputLabel value="Moneda" />
+					<span class="field">
+						<h:inputText value="#{detalleOCAction.ordenCompraSeleccionada.moneda.codigoAfip}" readonly="true" />
+					</span>
+				</div>
+				<br clear="all" />
+				<div class="one_half">
+					<h:outputLabel value="Número de Revisión" />
+					<span class="field">
+						<h:inputText value="#{detalleOCAction.ordenCompraSeleccionada.numeroRevision}" readonly="true">
+							<f:convertNumber type="number" integerOnly="true" />
+						</h:inputText>
+					</span>
+				</div>
+				<div class="one_half last">
+					<h:outputLabel value="Fecha Aprobación" />
+					<span class="field">
+						<h:inputText value="#{detalleOCAction.ordenCompraSeleccionada.fechaAprobacion}" readonly="true">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:inputText>
+					</span>
+				</div>
+				<br clear="all" />
+			</div>
+			
+			<p:commandButton value="Alta de Factura" styleClass="stdbtn"
+				action="#{detalleOCAction.asociarFacturaOC(detalleOCAction.ordenCompraSeleccionada.id)}" update=":panelControl"
+				disabled="#{not detalleOCAction.abiertaConPendientes }" />
+			<br />
+			<br />
+			
+			<div class="contenttitle">
+				<h2 class="form">
+					<span>Lineas de la Orden de Compra</span>
+				</h2>
+			</div>
+
+			<h:outputText value="No hay Líneas asociadas a la Orden de compra" rendered="#{empty detalleOCAction.lineasOC}" />
+			<h:panelGroup rendered="#{not empty detalleOCAction.lineasOC}">
+				<p:dataTable id="lineasOCAsociadas" var="_lineaOC" value="#{detalleOCAction.lineasOC}"
+					styleClass="stdtable" paginatorPosition="bottom"
+					paginator="true" rows="5" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
+					rowsPerPageTemplate="5,10,15">
+					<p:column headerText="Nro." styleClass="head0 con0" style="text-align: center;">
+						<h:outputText value="#{_lineaOC.numeroLinea}" />
+					</p:column>
+					<p:column headerText="Descripción" styleClass="head1 con1">
+						<h:outputText value="#{_lineaOC.descripcionArticulo}" />
+					</p:column>
+					<p:column styleClass="head0 con0" style="text-align: center;">
+						<f:facet name="header">
+							<h:outputText value="Unidad Medida" />
+						</f:facet>
+						<h:outputText value="#{_lineaOC.unidadMedida}" />
+					</p:column>
+					<p:column headerText="Nota al Proveedor" styleClass="head1 con1">
+						<h:outputText value="#{_lineaOC.notaAlProveedor}" />
+					</p:column>
+					<p:column styleClass="head0 con0" style="text-align: right;">
+						<f:facet name="header">
+							<h:outputText value="Precio Unitario" />
+						</f:facet>
+						<h:outputText value="#{_lineaOC.precioUnitario}">
+							<f:convertNumber type="currency" locale="es-AR" currencySymbol="" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Cantidad" styleClass="head1 con1" style="text-align: right;">
+						<h:outputText value="#{_lineaOC.cantidad}" />
+					</p:column>
+					<p:column headerText="Total" styleClass="head0 con0" style="text-align: right;">
+						<h:outputText value="#{_lineaOC.cantidad * _lineaOC.precioUnitario}">
+							<f:convertNumber type="currency" locale="es-AR" currencySymbol="" />
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+			</h:panelGroup>
+			<br />
+			
+			
+			<div class="contenttitle">
+				<h2 class="list">
+					<span>Facturas Asociadas</span>
+				</h2>
+			</div>
+			
+			<h:outputText value="No hay facturas asociadas a la orden de compra" rendered="#{empty detalleOCAction.facturasAsociadas}" />
+			<h:panelGroup rendered="#{not empty detalleOCAction.facturasAsociadas}">
+				<p:dataTable id="facturasAsociadas" var="_factura" value="#{detalleOCAction.facturasAsociadas}"
+					paginatorPosition="bottom" paginator="true" rows="5"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15"
+					styleClass="stdtable">
+					<p:column headerText="Número" styleClass="head0 con0" style="text-align: center;">
+						<h:outputText value="#{_factura.tipoLetraNumero}" />
+					</p:column>
+
+					<p:column headerText="Estado" styleClass="head1 con1" style="text-align: center;">
+						<h:outputText value="#{_factura.estado.nombre}" />
+					</p:column>
+
+					<p:column headerText="Fecha" styleClass="head0 con0" style="text-align: center;">
+						<h:outputText value="#{_factura.fecha}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Importe" styleClass="head1 con1" style="text-align: right;">
+						<h:outputText value="#{_factura.importe}">
+							<f:convertNumber type="currency" locale="es-AR" currencySymbol="" />
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+			</h:panelGroup>
+			<br />
+			
+			<div style="text-align: right;">
+				<p:commandButton value="Volver" action="#{detalleOCAction.volver}" styleClass="stdbtn" update=":panelControl" />
+			</div>
+
+		</h:form>
+	</p:outputPanel>
+</ui:composition>

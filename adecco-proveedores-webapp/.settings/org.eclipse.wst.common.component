@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="adecco-proveedores-webapp">
+        <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <dependent-module archiveName="adecco-proveedores-services-8.0.Final.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/adecco-proveedores-services/adecco-proveedores-services">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="adecco-proveedores-daos-8.0.Final.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/adecco-proveedores-daos/adecco-proveedores-daos">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="adecco-proveedores-model-8.0.Final.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/adecco-proveedores-model/adecco-proveedores-model">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="context-root" value="adecco-proveedores-webapp"/>
+        <property name="java-output-path" value="/adecco-proveedores-webapp/target/classes"/>
+    </wb-module>
+</project-modules>

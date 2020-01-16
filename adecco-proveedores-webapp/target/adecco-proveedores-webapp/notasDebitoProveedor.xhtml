@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui">
+
+<!--@elvariable id="controller" type="ar.com.adecco.proveedores.action.PanelControlAction"-->
+<ui:param name="controller" value="#{panelControlAction}" />
+
+<p:outputPanel id="notasDebito">
+
+    <div class="contenttitle">
+        <h2 class="list">
+            <span>Notas de Débito</span>
+        </h2>
+    </div>
+
+    <h:form id="notasDebitoForm" styleClass="stdform">
+        <h:panelGroup>
+            <p:dataTable id="notasDebitoTable" var="nd"
+                value="#{controller.notasDebito}" lazy="true"
+                paginator="true" rows="5" paginatorPosition="bottom"
+                paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                currentPageReportTemplate="Mostrando {startRecord} a {endRecord} de {totalRecords} registros"
+                rowsPerPageTemplate="5,10,20,50"
+                emptyMessage="No hay notas de débito asociadas"
+                paginatorAlwaysVisible="false"
+                styleClass="stdtable">
+
+                <p:column styleClass="head0 con0" style="text-align: center;">
+                    <f:facet name="header">
+                        <h:outputText value="Número" />
+                    </f:facet>
+                    <p:commandLink value="#{nd.letraNumero}" actionListener="#{controller.showNotaDebito(nd)}"
+                        update=":panelControl" />
+                    <f:facet name="footer">
+                        <h:outputText value="Número" />
+                    </f:facet>
+                </p:column>
+
+                <p:column styleClass="head1 con1" style="text-align: center;">
+                    <f:facet name="header">
+                        <h:outputText value="Estado" />
+                    </f:facet>
+                    <h:outputText value="#{nd.estado.nombre}" />
+                    <f:facet name="footer">
+                        <h:outputText value="Estado" />
+                    </f:facet>
+                </p:column>
+
+                <ui:remove>
+                <!--<p:column styleClass="head0 con0">-->
+                    <!--<f:facet name="header">-->
+                        <!--<h:outputText value="Estado EBS" />-->
+                    <!--</f:facet>-->
+                    <!--<h:outputText value="#{nd.estadoEbs.nombre}" style="color: red;" />-->
+                    <!--<f:facet name="footer">-->
+                        <!--<h:outputText value="Estado EBS" />-->
+                    <!--</f:facet>-->
+                <!--</p:column>-->
+                </ui:remove>
+
+                <p:column styleClass="head0 con0" style="text-align: center;">
+                    <f:facet name="header">
+                        <h:outputText value="Fecha" />
+                    </f:facet>
+                    <h:outputText value="#{nd.fecha}">
+                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                    <f:facet name="footer">
+                        <h:outputText value="Fecha" />
+                    </f:facet>
+                </p:column>
+
+                <p:column styleClass="head1 con1" style="text-align: center;">
+                    <f:facet name="header">
+                        <h:outputText value="Factura" />
+                    </f:facet>
+                    <h:outputText value="#{nd.facturaAplicada.letraNumero}" />
+                    <f:facet name="footer">
+                        <h:outputText value="Factura" />
+                    </f:facet>
+                </p:column>
+
+                <ui:remove>
+                <!--<p:column styleClass="head1 con1">-->
+                    <!--<f:facet name="header">-->
+                        <!--<h:outputText value="Proveedor" />-->
+                    <!--</f:facet>-->
+                    <!--<h:outputText value="#{nd.proveedor.razonSocial}" />-->
+                    <!--<f:facet name="footer">-->
+                        <!--<h:outputText value="Proveedor" />-->
+                    <!--</f:facet>-->
+                <!--</p:column>-->
+                </ui:remove>
+
+                <p:column styleClass="head0 con0" style="text-align: right;">
+                    <f:facet name="header">
+                        <h:outputText value="Importe" />
+                    </f:facet>
+                    <h:outputText value="#{nd.importe}">
+                        <f:convertNumber type="currency" currencySymbol="" />
+                    </h:outputText>
+                    <f:facet name="footer">
+                        <h:outputText value="Importe" />
+                    </f:facet>
+                </p:column>
+            </p:dataTable>
+
+        </h:panelGroup>
+
+        <div style="text-align: right">
+            <p:commandButton value="Alta de Nota de Débito" action="#{controller.showNewNotaDebito}"
+                update=":panelControl" disabled="#{not controller.proveedorHabilitado}"
+                styleClass="radius2" style="margin: 6px 0 0;" />
+        </div>
+    </h:form>
+</p:outputPanel>
+</ui:composition>

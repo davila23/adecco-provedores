@@ -1,0 +1,1028 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<!--@elvariable id="parentUpdate" type="java.lang.String"-->
+<!--@elvariable id="parentAction" type="ar.com.adecco.proveedores.action.base.AprobacionProveedorAction"-->
+<!--@elvariable id="action" type="ar.com.adecco.proveedores.action.PanelProveedorAction"-->
+<ui:param name="action" value="#{panelProveedorAction}" />
+<!--@elvariable id="perfil" type="ar.com.adecco.proveedores.model.Perfil"-->
+<ui:param name="perfil" value="#{panelProveedorAction.perfil}" />
+		
+	<h:panelGroup id="panelProveedor">
+		<h:form id="panelProveedorForm" styleClass="stdform">
+			<h:panelGroup rendered="#{perfil == 'PROVEEDOR' and (action.proveedorNuevo or action.proveedorIngresado or action.proveedorRechazado)}"
+				style="padding: 0.5em 1em;">
+				<h4>IMPORTANTE - ANTES DE COMPLETAR EL FORMULARIO LEA ESTAS INSTRUCCIONES:</h4>
+				1. Esta información le es requerida para el alta de su organización en nuestro sistema de proveedores.<br/>
+				2. Por favor llenar todos los casilleros que son obligatorios. Sino aplica indicar N/A.<br/>
+				3. Adjuntar copia de documentación impositiva (CUIT, IIBB, formularios de exenciones, etc).<br/>
+				4. Cualquier información falsa o incompleta invalidará automáticamente este formulario.<br/>
+			</h:panelGroup>
+			
+			<h:panelGroup style="float: right; margin-bottom: 3px;">
+				<h:panelGroup rendered="#{action.disabled}">
+					<button class="radius2" onclick="$('.widgetbox > .widgetcontent:not(:visible)').slideDown('fast').prev().removeClass('widgettoggle'); return false;">Expandir todo</button>
+					<button class="radius2" onclick="$('.widgetbox > .widgetcontent:visible').slideUp('fast').prev().addClass('widgettoggle'); return false;">Contraer todo</button>
+				</h:panelGroup>
+<ui:remove>
+<!-- 					<button styleclass="radius2" onclick="$('html, body').animate({ scrollTop: $(document).height() }, 'fast'); return false;">Ir abajo</button> -->
+</ui:remove>
+			</h:panelGroup>
+			
+			<h:panelGroup rendered="#{action.disabled}">
+				<small class="desc no-margin-left">Los campos indicados con (*) son obligatorios.</small>
+			</h:panelGroup>
+			<div style="clear: both;" />
+			
+			<div class="#{action.disabled ? 'widgetbox' : ''}">
+				<div class="#{action.disabled ? '' : 'content'}title">
+					<h2 class="#{action.disabled ? 'tabbed' : 'form'}">
+						<span>Identificación de la empresa</span>
+					</h2>
+				</div>
+				<div class="#{action.disabled ? 'widgetcontent' : ''}" style="display: #{action.disabled ? 'none' : 'block'};">
+					<div class="stdform-content">
+						<div class="one_half">
+							<h:outputLabel value="Razón Social o Nombre *" />
+							<span class="field">
+								<h:inputText value="#{action.proveedor.razonSocial}" 
+									disabled="#{action.disabled}"/>
+							</span>
+						</div>
+						<div class="one_half last">
+							<h:outputLabel value="CUIT *" />
+							<span class="field">
+								<p:inputMask mask="99-99999999-9" value="#{action.proveedor.cuit}" 
+									disabled="#{action.disabled}" widgetVar="proveedorCuit" >
+									<p:ajax update="cuitMsg" event="keyup" listener="#{action.validarCuit}" global="false" onstart="var val = PF('proveedorCuit').getValue(); if (val.length != 13 || val.charAt(12) == '_') {$('#panelProveedorForm\\:cuitMsg').empty(); return false;}" />
+								</p:inputMask>
+							</span>
+							<h:panelGroup id="cuitMsg">
+								<small class="desc">
+									<h:outputText style="color: green;" value="CUIT válido" rendered="#{action.errorValidacionCuit == ''}" />
+									<h:outputText style="color: red;" value="#{action.errorValidacionCuit}" rendered="#{not empty action.errorValidacionCuit}" />
+									<h:outputText value="#{action.emptyErrorValidacionCuit()}" />
+								</small>
+							</h:panelGroup>
+						</div>
+						<br clear="all"/>
+						<div class="one_half">
+							<h:outputLabel value="Nombre Comercial " />  
+							<span class="field">
+								<h:inputText value="#{action.proveedor.nombreComercial}" 
+									disabled="#{action.disabled}"/>
+							</span>
+						</div>
+						<div class="one_half last">
+							<h:outputLabel value="Moneda *" />
+							<span class="field">
+								<h:selectOneMenu value="#{action.proveedor.moneda}" converter="monedaConverter" disabled="true">
+									<f:selectItems value="#{action.monedas}" 
+					  					var="item" itemLabel="#{item.codigoAfip}"/>
+			  					</h:selectOneMenu>
+							</span>
+						</div>
+						<br clear="all"/>
+						<div class="one_half">
+							<h:outputLabel value="Banco - Sucursal *" />
+							<span class="field">
+								<h:inputText value="#{action.proveedor.bancoSucursal}" 
+									disabled="#{action.disabled}"/>
+							</span>
+						</div>
+						<div class="one_half last">
+							<h:outputLabel value="CBU (22 dígitos) *" />
+							<span class="field">
+								<p:inputMask mask="9999999999999999999999"  
+									id="CBU" value="#{action.proveedor.cbu}" 
+									disabled="#{action.disabled}"/>
+							</span>
+						</div>
+						<br clear="all"/>
+						<div class="one_half">
+							<h:outputLabel value="Domicilio Fiscal *" />
+							<span class="field">
+								<h:inputText value="#{action.proveedor.domicilio}" 
+									disabled="#{action.disabled}"/>
+							</span>
+						</div>
+						<div class="one_half last">
+							<h:outputLabel value="Ciudad *" />
+							<span class="field">
+								<h:inputText value="#{action.proveedor.ciudad}" 
+									disabled="#{action.disabled}"/>
+							</span>
+						</div>
+						<br clear="all"/>
+						<div class="one_half">
+							<h:outputLabel value="Provincia *" />
+							<span class="field">
+								<h:selectOneMenu value="#{action.proveedor.provincia}" converter="provinciaConverter"
+									disabled="#{action.disabled}" >
+					   				<f:selectItems value="#{action.provincias}" 
+					   					var="item" itemLabel="#{item.descripcion}" />
+									<f:ajax event="change" render="local listaIIBBMultilateral jurisdiccion" listener="#{action.cambioDeProvincia}" />
+				   				</h:selectOneMenu>
+			   				</span>
+						</div>
+						<div class="one_half last">
+							<h:outputLabel value="Codigo Postal *" />
+							<span class="field">
+								<h:inputText value="#{action.proveedor.codigoPostal}" 
+									disabled="#{action.disabled}"/>
+							</span>
+						</div>
+						<br clear="all"/>
+						<div class="one_half">
+							<h:outputLabel value="Teléfono *" />
+							<span class="field">
+								<h:inputText value="#{action.proveedor.telefono}" 
+									disabled="#{action.disabled}"/>
+							</span>
+						</div>
+						<div class="one_half last">
+							<h:outputLabel value="Fax" />
+							<span class="field">
+								<h:inputText value="#{action.proveedor.fax}" 
+									disabled="#{action.disabled}"/>
+							</span>
+						</div>
+						<br clear="all"/>
+					</div>
+				</div>
+			</div>
+			
+			
+			<div class="#{action.disabled ? 'widgetbox' : ''}">
+				<div class="#{action.disabled ? '' : 'content'}title">
+					<h2 class="#{action.disabled ? 'tabbed' : 'form'}">
+						<span>Datos del representante legal</span>
+					</h2>
+				</div>
+				<div class="#{action.disabled ? 'widgetcontent' : ''}" style="display: #{action.disabled ? 'none' : 'block'};">
+					<div class="stdform-content">
+						<div class="one_half">
+							<h:outputLabel value="Nombre y Apellido"  />
+							<span class="field">
+								<h:inputText value="#{action.proveedor.apellidoNombreRL}" 
+									disabled="#{action.disabled}"/>
+							</span>
+						</div>
+						<div class="one_half last">
+							<h:outputLabel value="Documento de Identidad"/>
+							<span class="field">
+								<h:inputText value="#{action.proveedor.dniRL}" 
+									disabled="#{action.disabled}" maxlength="10">
+									<f:convertNumber type="number" currencySymbol="" groupingUsed="false" />
+								</h:inputText>
+							</span>
+						</div>
+						<br clear="all"/>
+						<div class="one_half">
+							<h:outputLabel value="Teléfono"  />
+							<span class="field">
+								<h:inputText value="#{action.proveedor.telefonoRL}" 
+									disabled="#{action.disabled}"/>
+							</span>
+						</div>
+						<div class="one_half last">
+							<h:outputLabel value="Fax"  />
+							<span class="field">
+								<h:inputText value="#{action.proveedor.faxRL}" 
+									disabled="#{action.disabled}"/>
+							</span>
+						</div>
+						<br clear="all"/>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="#{action.disabled ? 'widgetbox' : ''}">
+				<div class="#{action.disabled ? '' : 'content'}title">
+					<h2 class="#{action.disabled ? 'tabbed' : 'form'}">
+						<span>Datos de la persona de contacto para notificación de transferencia</span>
+					</h2>
+				</div>
+				<div class="#{action.disabled ? 'widgetcontent' : ''}" style="display: #{action.disabled ? 'none' : 'block'};">
+					<div class="stdform-content">
+						<div class="one_half">
+							<h:outputLabel value="Nombre y Apellido *"  />
+							<span class="field">
+								<h:inputText value="#{action.proveedor.apellidoNombreContacto}" 
+									disabled="#{action.disabled}"/>
+							</span>
+						</div>
+						<div class="one_half last">
+							<h:outputLabel value="Teléfono *"  />
+							<span class="field">
+								<h:inputText value="#{action.proveedor.telefonoContacto}" 
+									disabled="#{action.disabled}"/>
+							</span>
+						</div>
+						<br clear="all"/>
+						<div class="one_half">
+							<h:outputLabel value="E-mail *"  />
+							<span class="field">
+								<h:inputText value="#{action.proveedor.emailContacto}" 
+									disabled="#{action.disabled}"/>
+							</span>
+						</div>
+						<br clear="all"/>
+					</div>
+				</div>
+			</div>
+			
+			
+			<div class="#{action.disabled ? 'widgetbox' : ''}">
+				<div class="#{action.disabled ? '' : 'content'}title">
+					<h2 class="#{action.disabled ? 'tabbed' : 'form'}">
+						<span>Existencia de contrato</span>
+					</h2>
+				</div>
+				<div class="#{action.disabled ? 'widgetcontent' : ''}" style="display: #{action.disabled ? 'none' : 'block'};">
+					<h:panelGroup id="contratos">
+						<div class="stdform-content">
+							<div class="one_half">
+								<h:outputLabel value="Seleccione"  />
+								<span class="formwrapper">
+									<h:selectBooleanCheckbox
+										value="#{action.proveedor.contrato}" 
+										disabled="#{action.disabled}" styleClass="checkbox">
+										 <f:ajax event="change" immediate="true" render="contratos"
+											listener="#{action.proveedor.setContrato(not action.proveedor.contrato)}"
+											onevent="function(data) {if (data.status == 'success') $(document).trigger('ajaxStop');}" />	
+									</h:selectBooleanCheckbox>
+									<h:outputText value="Contrato" />
+									<br />
+									<h:selectBooleanCheckbox
+										value="#{action.proveedor.cartaOferta}" 
+										disabled="#{action.disabled}" styleClass="checkbox">
+										<f:ajax event="change" immediate="true" 
+											listener="#{action.proveedor.setCartaOferta(not action.proveedor.cartaOferta)}"
+											onevent="function(data) {if (data.status == 'success') $(document).trigger('ajaxStop');}" />	
+									</h:selectBooleanCheckbox>
+									<h:outputText value="Carta Oferta" />
+									<br />
+									<h:selectBooleanCheckbox
+										value="#{action.proveedor.propuestaComercial}" 
+										disabled="#{action.disabled}" styleClass="checkbox">
+										<f:ajax event="change" immediate="true" 
+											listener="#{action.proveedor.setPropuestaComercial(not action.proveedor.propuestaComercial)}"
+											onevent="function(data) {if (data.status == 'success') $(document).trigger('ajaxStop');}" />	
+									</h:selectBooleanCheckbox>
+									<h:outputText value="Propuesta Comercial" />
+								</span>
+							</div>
+							<div class="one_half last">
+								<h:outputLabel value="Otro"  />
+								<span class="field">
+									<h:inputText value="#{action.proveedor.otro}" 
+										disabled="#{action.disabled}"/>
+								</span>
+							</div>
+							<br clear="all"/>
+							<small class="desc no-margin-left">
+								<h:outputText rendered="#{action.proveedor.contrato}" value="Adjuntar contrato con el pago de impuestos a los sellos" />
+							</small>
+						</div>
+					</h:panelGroup>
+				</div>
+			</div>
+			
+			
+			<div class="#{action.disabled ? 'widgetbox' : ''}">
+				<div class="#{action.disabled ? '' : 'content'}title">
+					<h2 class="#{action.disabled ? 'tabbed' : 'form'}">
+						<span>Condiciones de pago</span>
+					</h2>
+				</div>
+				<div class="#{action.disabled ? 'widgetcontent' : ''}" style="display: #{action.disabled ? 'none' : 'block'};">
+					<div class="stdform-content">
+						<div class="one_half">
+							<h:outputLabel value="Término de Pago" />
+							<span class="field">
+								<p:inputText value="#{action.proveedor.terminoPago}" disabled="true"/>
+							</span>
+						</div>
+						<br clear="all"/>
+					</div>
+				</div>
+			</div>
+			
+			
+			<div class="#{action.disabled ? 'widgetbox' : ''}">
+				<div class="#{action.disabled ? '' : 'content'}title">
+					<h2 class="#{action.disabled ? 'tabbed' : 'form'}">
+						<span>Información tributaria (debe marcar solo una opcion por linea: SI o NO)</span>
+					</h2>
+				</div>
+				<div class="#{action.disabled ? 'widgetcontent' : ''}" style="display: #{action.disabled ? 'none' : 'block'};">
+					<div class="stdform-content">
+						<div class="one_half">
+							<h:outputLabel value="Descripción *"  />
+							<span class="field">
+								<h:inputText value="#{action.proveedor.descripcionActividad}" 
+									disabled="#{action.disabled}"/>
+							</span>
+							<small class="desc">Breve descripción de la actividad que se prestará a Adecco.</small>
+						</div>
+						<div class="one_half last">
+							<h:outputLabel value="Ingresos Brutos Nro *" />
+							<span class="field">
+								<h:inputText value="#{action.proveedor.nroIIBB}" 
+									disabled="#{action.disabled}"/>
+							</span>
+						</div>
+						<br clear="all"/>
+						
+						<h:panelGroup id="local">
+							<h4>Local:</h4>
+							<div class="one_half">
+								<h:outputLabel value="Jurisdicción" />
+								<span class="field">
+									<h:selectOneMenu id="jurisdiccion" value="#{action.proveedor.jurisdiccionLocal}"
+										converter="provinciaConverter" disabled="true">
+					   					<f:selectItems value="#{action.provincias}" 
+					   						var="item" itemLabel="#{item.descripcion}"/>
+									</h:selectOneMenu> 
+								</span>
+							</div>
+							<div class="one_half last">
+								<h:outputLabel value="% Exclusión"/>
+								<span class="field">
+									<h:inputText id="excLocal" 
+										styleClass="mediuminput" value="#{action.proveedor.porcentajeExclusionLocal}"
+										disabled="#{action.disabledExclusionLocal or action.disabled}" />
+									</span>
+							</div>
+							<br clear="all"/>
+							<div class="one_half">
+								<h:panelGroup id="chkExeLocal" >
+									<h:outputLabel value="Exento" />
+									<span class="field">
+										<p:commandLink 
+											style="margin-top: 10px;"
+											action="#{action.changeExentoLocal}"
+											update="chkExeLocal excLocal" immediate="true" bypassUpdates="true"
+											global="false" limitToList="true" status="ninguno"
+											disabled="#{action.disabled}">							
+											<span class="switch #{action.proveedor.exentoLocal ? '' : 'switch-off'}"></span>
+										</p:commandLink>
+									</span>
+								</h:panelGroup>
+							</div>
+							<br clear="all"/>
+						</h:panelGroup>
+					</div>
+			
+					<h:panelGroup  id="infoTributaria">
+						<h4>Multilateral:</h4>
+						<div style="max-width: 750px;">
+							<div class="one_half last"  style="width: 100%;">
+								<span class="formwrapper">
+									<p:dataTable styleClass="stdtable" var="_IIBBMultilateral" value="#{action.proveedor.iibbMultilaterales}" 
+										id="listaIIBBMultilateral" emptyMessage="No hay registros cargados." style="margin: 6px 0;">
+					
+										<p:column headerText="Jurisdicción" styleClass="head0 con0">
+										 	<h:outputText value="#{_IIBBMultilateral.jurisdiccion.nombre}" />
+										</p:column>
+											
+										<p:column headerText="Exento" styleClass="head1 con1" style="text-align: center;">
+										 	<h:outputText value="SI" rendered="#{_IIBBMultilateral.exento}" />
+											<h:outputText value="NO" rendered="#{not _IIBBMultilateral.exento}" />
+										</p:column>
+										
+										<p:column headerText="% de Exclusión" styleClass="head0 con0" style="text-align: center;">
+										 	<h:outputText value="#{_IIBBMultilateral.porcentajeExclusion}" />
+										</p:column>
+					
+										<p:column styleClass="head1 con1"
+                                                  style="text-align: center;">
+											<p:commandLink action="#{action.eliminarIIBBMultilateral(_IIBBMultilateral)}" 
+											 		onclick="if(!confirm('¿Está seguro que desea eliminar el IIBB seleccionado?')) return false;"
+											 		value="Eliminar" update=":panelProveedor :evaluarModificaciones" rendered="#{not action.disabled}"/>
+										</p:column>
+					
+									</p:dataTable>
+									<p:commandButton styleClass="stdbtn" value="Agregar"
+										update=":panelProveedor :panelProveedorMultilateralForm"
+										oncomplete="PF('dlgPopUpMultilateral').show();"
+										rendered="#{not action.disabled}"/>
+								</span>
+							</div>
+							<br clear="all" />
+						</div>
+						
+		 				<br />
+		 				
+						<div class="stdform-content">
+							<div class="one_half">
+								<h:outputLabel value="Condición de IVA *" />
+								<span class="field">
+									<h:selectOneMenu value="#{action.proveedor.condicionIVA}" 
+										disabled="#{action.disabled}">
+										<f:selectItem itemLabel="Seleccionar..." itemValue="#{null}" />
+								   		<f:selectItems value="#{action.comboCondicionIVA}" var="item"
+								   			itemLabel="#{item.descripcion}" itemValue="#{item.descripcion}"/> 
+							   		</h:selectOneMenu>
+						   		</span>
+							</div>
+							<div class="one_half last">
+								<h:outputLabel value="Impuesto de Ganancias" />
+								<span class="field">
+									<h:selectOneMenu value="#{action.proveedor.impuestoGanancias}" 
+										disabled="#{action.disabled}">
+								   		<f:selectItems value="#{action.comboImpuestoGanancias}" var="item"
+								   			itemLabel="#{item.descripcion}" itemValue="#{item.descripcion}"/> 
+										<p:ajax event="change" listener="#{action.impuestosGananciasChanged}" 
+											update="porceExclusion" />
+									</h:selectOneMenu>
+								</span>
+							</div>
+							<br clear="all" />
+							<div class="one_half">
+								<h:outputLabel value="Exclusión %" />
+								<span class="field">
+									<h:inputText id="porceExclusion" 
+										value="#{action.proveedor.porcentajeExclusion}" 
+										disabled="#{action.disabledExclusion or action.disabled}"/>
+								</span>
+							</div>
+							<div class="one_half last">
+								<h:outputLabel value="Actividad Principal *" />
+								<span class="field">
+									<h:selectOneMenu value="#{action.proveedor.actividadPrincipal}" 
+										disabled="#{action.disabled}">
+										<f:selectItem itemLabel="Seleccionar..." itemValue="#{null}" />
+										<f:selectItems value="#{action.actividadesPrincipales}" var="item"
+											itemLabel="#{item.descripcion}" itemValue="#{item.descripcion}" />
+									</h:selectOneMenu>
+								</span>
+							</div>
+							<br clear="all" />
+						</div>
+					</h:panelGroup>
+					
+					<br/>
+					<small class="desc no-margin-left">Nota: todos los cheques seran emitidos con la leyenda "no a la orden" y cruzados</small>
+					<br />
+				</div>
+			</div>
+			
+			
+			<div class="#{action.disabled ? 'widgetbox' : ''}">
+				<div class="#{action.disabled ? '' : 'content'}title">
+					<h2 class="#{action.disabled ? 'tabbed' : 'form'}">
+						<span>Evaluación de proveedor</span>
+					</h2>
+				</div>
+				<div class="#{action.disabled ? 'widgetcontent' : ''}" style="display: #{action.disabled ? 'none' : 'block'};">
+					<div class="stdform-content">
+						<div class="two_third">
+							<h:outputText value="1. ¿Tiene un Sistema de Gestión de Calidad implementado? *" />
+						</div>
+						<div class="one_third last">
+							<h:panelGroup id="chkSistGestion" >
+								<p:commandLink 
+									action="#{action.proveedor.setSistemaGestionCalidad(not action.proveedor.sistemaGestionCalidad)}"
+									update="chkSistGestion" immediate="true" bypassUpdates="true"
+									disabled="#{action.disabled}"	global="false"
+									limitToList="true" status="ninguno">
+									<span class="switch #{action.proveedor.sistemaGestionCalidad ? '' : 'switch-off'}"></span>
+								</p:commandLink>
+							</h:panelGroup>
+						</div>
+						<br clear="all" />
+						
+						<small class="desc no-margin-left">Si su respuesta es NO contestar las siguientes preguntas</small>
+						<br />
+						
+						<div class="two_third">
+							<h:outputText value="2. ¿Tiene capacidad para cumplir con los requisitos de Adecco 
+								(pliego licitación / especificación compra / tiempos de entrega / cantidades y calidad requerida)? *" />
+						</div>
+						<div class="one_third last">
+							<h:panelGroup id="chkReqAdecco" >
+								<p:commandLink 
+									action="#{action.proveedor.setRequisitosAdecco(not action.proveedor.requisitosAdecco)}"
+									update="chkReqAdecco" immediate="true" bypassUpdates="true"
+									disabled="#{action.disabled}"	global="false"
+									limitToList="true" status="ninguno">
+									<span class="switch #{action.proveedor.requisitosAdecco ? '' : 'switch-off'}"></span>
+								</p:commandLink>
+							</h:panelGroup>
+						</div>
+						<br clear="all" />
+						<div class="one_half last" style="width: 100%;">
+							<h:outputLabel value="Fundamente Respuesta"  />
+							<span class="field">
+								<h:inputTextarea value="#{action.proveedor.respuestaRequisitosAdecco}" 
+									disabled="#{action.disabled}" />
+							</span>
+						</div>
+						<br clear="all" />
+						
+						<div class="two_third">
+							<h:outputText value="3. ¿Tiene algún mecanismo o procedimiento para controlar la calidad de los productos/servicios que brinda? *"/>
+						</div>
+						<div class="one_third last">
+							<h:panelGroup id="chkProCalidad" >
+								<p:commandLink 
+									action="#{action.proveedor.setProcedimientoCalidad(not action.proveedor.procedimientoCalidad)}"
+									update="chkProCalidad" immediate="true" bypassUpdates="true"
+									disabled="#{action.disabled}"	global="false"
+									limitToList="true" status="ninguno">
+									<span class="switch #{action.proveedor.procedimientoCalidad ? '' : 'switch-off'}"></span>
+								</p:commandLink>
+							</h:panelGroup>
+						</div>
+						<br clear="all" />
+						<div class="one_half last" style="width: 100%;">
+							<h:outputLabel value="Fundamente Respuesta"  />
+							<span class="field">
+								<h:inputTextarea value="#{action.proveedor.respuestaProcedimientoCalidad}" 
+									disabled="#{action.disabled}" />
+							</span>
+						</div>
+						<br clear="all" />
+						
+						<div class="two_third">
+							<h:outputText value="4. ¿Realiza seguimiento de la efectividad de entregas y permite su sistema avisar con
+												tiempo prudencial en caso de postergación/anticipación de compromisos? *"/>
+						</div>
+						<div class="one_third last">
+							<h:panelGroup id="chkSegAviso" >
+								<p:commandLink
+									action="#{action.proveedor.setSeguimientoAviso(not action.proveedor.seguimientoAviso)}"
+									update="chkSegAviso" immediate="true" bypassUpdates="true"
+									disabled="#{action.disabled}"	global="false"
+									limitToList="true" status="ninguno">
+									<span class="switch #{action.proveedor.seguimientoAviso ? '' : 'switch-off'}"></span>
+								</p:commandLink>
+							</h:panelGroup>
+						</div>
+						<br clear="all" />
+						<div class="one_half last" style="width: 100%;">
+							<h:outputLabel value="Fundamente Respuesta"  />
+							<span class="field">
+								<h:inputTextarea value="#{action.proveedor.respuestaSeguimientoAviso}" 
+									disabled="#{action.disabled}" />
+							</span>
+						</div>
+						<br clear="all" />
+						
+						<div class="two_third">
+						<h:outputText value="5. ¿Tiene algún sistema/procedimiento para gestionar quejas y reclamos de clientes,
+											de manera de poder resolver las incidencias en tiempo y forma? *"/>
+						</div>
+						<div class="one_third last">
+							<h:panelGroup id="chkReclamo" >
+								<p:commandLink 
+									action="#{action.proveedor.setReclamo(not action.proveedor.reclamo)}"
+									update="chkReclamo" immediate="true" bypassUpdates="true"
+									disabled="#{action.disabled}"
+									global="false"
+									limitToList="true" status="ninguno">
+									<span class="switch #{action.proveedor.reclamo ? '' : 'switch-off'}"></span>
+								</p:commandLink>
+							</h:panelGroup>
+						</div>
+						<br clear="all" />
+						<div class="one_half last" style="width: 100%;">
+							<h:outputLabel value="Fundamente Respuesta"  />
+							<span class="field">
+								<h:inputTextarea value="#{action.proveedor.respuestaReclamo}" 
+									disabled="#{action.disabled}" />
+							</span>
+						</div>
+						<br clear="all" />
+					</div>
+				</div>
+			</div>
+			
+			
+			<div class="#{action.disabled ? 'widgetbox' : ''}">
+				<div class="#{action.disabled ? '' : 'content'}title">
+					<h2 class="#{action.disabled ? 'tabbed' : 'form'}">
+						<span>Adjuntos</span>
+					</h2>
+				</div>
+				<div class="#{action.disabled ? 'widgetcontent' : ''}" style="display: #{action.disabled ? 'none' : 'block'};">
+					<h:panelGroup id="adjuntos" rendered="#{not action.isProveedorNuevo}">
+					
+						<h:panelGroup rendered="#{action.operacionDeAdjunto}">
+							<h:panelGroup rendered="#{action.setOperacionDeAdjuntoFalse()}"></h:panelGroup>
+							<p:messages for="mensajesAdjunto" id="mensajesAdjunto" />
+							<h:outputScript>
+							/* Workaround */
+							jQuery(function() {
+								if (jQuery('.ui-messages').children().length > 0) {
+									var msjsTop = jQuery('.ui-messages').eq(0).offset().top;
+									var $body = jQuery('html, body');
+									$body.each(function() {
+										$body.animate({ scrollTop: msjsTop }, 'fast');
+										return false;
+									})
+								}
+							});
+							</h:outputScript>
+						</h:panelGroup>
+						
+						<p:dataTable id="listaAdjuntos" var="_adjunto" value="#{action.adjuntos}" 
+							emptyMessage="No hay registros cargados." styleClass="stdtable" style="margin: 6px 0;">
+		
+							<p:column headerText="Nombre" styleClass="head0 con0">
+								<p:commandLink action="#{action.descargarAdjunto(_adjunto)}" 
+									value="#{_adjunto.nombre}"
+									title="Descargar archivo"
+									onclick="actionIgnorarUnaVez('panelProveedor');"
+									immediate="true" ajax="false" />
+							</p:column>
+													
+							<p:column headerText="Descripción" styleClass="head1 con1">
+								<h:outputText value="#{_adjunto.descripcion}" />
+							</p:column>
+							
+							<p:column headerText="Tipo" styleClass="head0 con0">
+								<h:outputText value="#{_adjunto.tipoArchivo}" />	 	
+							</p:column>
+							
+							<p:column headerText="Tamaño" styleClass="head1 con1" style="text-align: right;">
+								<h:outputText value="#{action.getCantidadBytes(_adjunto.size)}" />
+							</p:column>
+							
+							<p:column styleClass="head0 con0"
+                                      style="text-align: center;">
+								<p:commandLink action="#{action.eliminarAdjunto(_adjunto)}" 
+								 		onclick="if(!confirm('¿Está seguro que desea eliminar el archivo adjunto seleccionado?')) return false;"
+								 		value="Eliminar" update=":panelProveedorForm:adjuntos" rendered="#{not action.disabled}"/>
+							</p:column>
+							
+						</p:dataTable>
+						
+						<p:commandButton styleClass="stdbtn" value="Agregar"
+							rendered="#{not action.disabled}" action="#{action.abrirPopUpAdjuntos}"
+							oncomplete="PF('dlgPopUpAdjuntos').show()"
+							style="margin: 0 0 6px;" />
+					</h:panelGroup>
+					
+					<h:panelGroup rendered="#{action.isProveedorNuevo}">
+						<small class="desc no-margin-left">* Para poder agregar Adjuntos debe primero guardar el Proveedor.</small>
+					</h:panelGroup>			
+				</div>
+			</div>
+			
+			
+			<div class="#{action.disabled ? 'widgetbox' : ''}">
+				<div class="#{action.disabled ? '' : 'content'}title">
+					<h2 class="#{action.disabled ? 'tabbed' : 'form'}">
+						<span>Observaciones</span>
+					</h2>
+				</div>
+				<div class="#{action.disabled ? 'widgetcontent' : ''}" style="display: #{action.disabled ? 'none' : 'block'};">
+					<div class="stdform-content">
+						<div class="one_half last" style="width: 100%;">
+							<h:outputLabel value="Observaciones"  />
+							<span class="field">
+								<h:inputTextarea value="#{action.proveedor.observaciones}" 
+									disabled="#{action.disabled}" />
+							</span>
+						</div>
+						<br clear="all" />
+					</div>
+				</div>
+			</div>
+			
+			
+			<h:panelGroup rendered="#{not action.proveedorNuevo}">
+				<div class="#{action.disabled ? 'widgetbox' : ''}">
+					<div class="#{action.disabled ? '' : 'content'}title">
+						<h2 class="#{action.disabled ? 'tabbed' : 'form'}">
+							<span>Estado</span>
+						</h2>
+					</div>
+					<div class="#{action.disabled ? 'widgetcontent' : ''}" style="display: #{action.disabled ? 'none' : 'block'};">
+						<div class="stdform-content">
+							<div class="one_half">
+								<h:outputLabel value="Estado" />
+								<span class="field">
+									<h:inputText value="#{action.proveedor.estado.nombre}" 
+										disabled="#{true}"/>
+								</span>
+							</div>
+							<div class="one_half last">
+								<h:panelGroup rendered="#{action.proveedorAprobado}">
+									<h:outputLabel value="Fecha vencimiento"  />
+									<span class="field">
+										<p:calendar value="#{action.proveedor.fechaVencimiento}"
+											pattern="dd/MM/yyyy"
+											disabled="true">
+											<f:validator validatorId="validadorFecha"/>
+										</p:calendar> 
+									</span>
+								</h:panelGroup>
+								<h:panelGroup rendered="#{action.proveedorRechazado}">
+									<h:outputLabel value="Motivo" />
+									<span class="field">
+										<h:inputText value="#{action.estadoActual.comentario}" 
+											disabled="true" />
+									</span>
+								</h:panelGroup>
+							</div>
+							<br clear="all"/>
+						</div>
+					</div>
+				</div>
+			</h:panelGroup>
+			
+			
+			<!-- ESTOS ITEMS SOLO SE VAN A MOSTRAR EN LA APROBACION DEL SECTOR DE COMPRAS -->
+			<h:panelGroup rendered="#{perfil == 'COMPRAS'}">
+			
+				<div class="#{action.disabledCompras ? 'widgetbox' : ''}">
+					<div class="#{action.disabledCompras ? '' : 'content'}title">
+						<h2 class="#{action.disabledCompras ? 'tabbed' : 'form'}">
+							<span>Motivo por el cual se seleccionó el proveedor</span>
+						</h2>
+					</div>
+					<div class="#{action.disabledCompras ? 'widgetcontent' : ''}" style="display: #{action.disabledCompras ? 'none' : 'block'};">
+						<div class="stdform-content">
+							<div class="one_half">
+								<h:outputLabel value="Motivo *"  />
+								<span class="field">
+									<h:inputText id="motivo" value="#{action.proveedor.motivo}" disabled="#{action.disabledCompras}">
+										<f:ajax event="change" immediate="true" render="motivo"/>
+									</h:inputText>
+								</span>
+							</div>
+							<br clear="all"/>
+						</div>
+					</div>
+				</div>
+				
+				
+				<div class="#{action.disabledCompras ? 'widgetbox' : ''}">
+					<div class="#{action.disabledCompras ? '' : 'content'}title">
+						<h2 class="#{action.disabledCompras ? 'tabbed' : 'form'}">
+							<span>Cantidad de cotizaciones presentadas</span>
+						</h2>
+					</div>
+					<div class="#{action.disabledCompras ? 'widgetcontent' : ''}" style="display: #{action.disabledCompras ? 'none' : 'block'};">
+						<div class="stdform-content">
+							<div class="one_half">
+								<h:outputLabel value="Cantidad de Cotizaciones"  />
+								<span class="field">
+									<h:inputText id="cotizaciones" value="#{action.proveedor.cantidadCotizaciones}" disabled="#{action.disabledCompras}">
+										<f:convertNumber type="number" currencySymbol=""/>
+										<f:ajax event="change" immediate="true" render="cotizaciones"/>
+									</h:inputText>
+								</span>
+							</div>
+							<br clear="all"/>
+						</div>
+					</div>
+				</div>
+			</h:panelGroup>
+			
+			<br />
+			
+			<h:panelGroup rendered="#{perfil == 'COMPRAS' and action.proveedorAprobado}">	
+				<div class="stdform-content">
+					<div class="one_half">
+						<h:outputLabel value="Fecha venc. del proveedor"  />
+						<span class="field">
+							<p:calendar value="#{action.proveedor.fechaVencimiento}"
+								converterMessage="El formato del campo Fecha vencimiento del proveedor debe ser dd/mm/aaaa"
+								pattern="dd/MM/yyyy">
+								<f:validator validatorId="validadorFecha"/>
+							</p:calendar> 
+						</span>
+					</div>
+					<br clear="all" />
+				</div>
+			</h:panelGroup>
+				
+<ui:remove>
+<!-- Estos botones no encajan bien porque también esta el botón Volver a la derecha. Se comentan. -->
+<!-- 			<h:panelGroup style="float: right;"> -->
+<!-- 				<h:panelGroup rendered="#{action.disabled}"> -->
+<!-- 					<button styleclass="radius2" onclick="$('.widgetbox > .widgetcontent:not(:visible)').slideDown('fast').prev().removeClass('widgettoggle'); return false;">Expandir todo</button> -->
+<!-- 					<button styleclass="radius2" onclick="$('.widgetbox > .widgetcontent:visible').slideUp('fast').prev().addClass('widgettoggle'); return false;">Contraer todo</button> -->
+<!-- 				</h:panelGroup> -->
+<!-- 				<button styleclass="radius2" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast'); return false;">Ir arriba</button> -->
+<!-- 			</h:panelGroup> -->
+</ui:remove>
+
+<ui:remove>
+			<!-- ACCIONES -->
+			
+			<!-- Hay updates referenciando a la página PARENT. -->
+			<!-- Hay actions referenciando a la ACTION de la página PARENT. -->
+</ui:remove>
+			
+			<h:panelGroup rendered="#{perfil == 'PROVEEDOR'}">
+				<h:panelGroup rendered="#{not action.disabled}">
+					<p:commandButton value="Guardar"
+						action="#{parentAction.guardarProveedor}"
+						update="#{parentUpdate} :evaluarModificaciones"
+						disabled="#{action.proveedor.estado == 'APROBADO'}"
+						styleClass="stdbtn" />
+					<p:commandButton value="Enviar"
+						action="#{parentAction.enviarProveedor}"
+						onclick="if(!confirm('¿Está seguro que desea enviar los datos del Proveedor?')) return false;"
+						update="#{parentUpdate} :evaluarModificaciones"
+                        rendered="#{not action.isProveedorNuevo}"
+						styleClass="stdbtn" />
+				</h:panelGroup>
+			</h:panelGroup>
+			
+			<h:panelGroup rendered="#{perfil == 'COMPRAS'}">
+				<p:commandButton value="Volver"
+					action="#{parentAction.back}"
+					onclick="if(actionCancelar('panelProveedor')) return false;"
+					update="#{parentUpdate} :evaluarModificaciones"
+					styleClass="stdbtn" style="float: right;" />
+				<p:commandButton value="Guardar"
+					action="#{action.guardarFechaVencimiento}"
+					update=":panelProveedor :evaluarModificaciones"
+					rendered="#{action.proveedorAprobado}"/>
+				<h:panelGroup rendered="#{action.proveedorEnviado}">
+					<p:commandButton value="Guardar"
+						action="#{action.guardarProveedor}"
+						update=":panelProveedor :evaluarModificaciones" styleClass="stdbtn" />
+					<p:commandButton value="Aprobar"
+						action="#{parentAction.aprobar}"
+						update="#{parentUpdate} :evaluarModificaciones" styleClass="stdbtn"
+                        rendered="#{not action.proveedor.aprobadoCompras}" />
+					<p:commandButton value="Rechazar"
+						action="#{parentAction.rechazar}"
+						update="#{parentUpdate} :evaluarModificaciones" styleClass="stdbtn" />
+					<h:outputText value="Motivo Rechazo" style="margin: 0 9px 0 6px;" />
+					<p:inputText value="#{action.motivoRechazo}" />
+				</h:panelGroup>
+				<h:panelGroup rendered="#{action.proveedorErrorAprobacion and action.puedeAprobarseProveedor}">
+					<p:commandButton value="Reintentar Aprobar"
+						action="#{action.reintentarAprobar}"
+						update=":panelProveedor :evaluarModificaciones" styleClass="stdbtn" />
+				</h:panelGroup>
+				<br clear="all" />
+			</h:panelGroup>
+			
+			<h:panelGroup rendered="#{perfil == 'IMPUESTOS'}">
+				<p:commandButton value="Volver"
+					action="#{parentAction.back}"
+					onclick="if(actionCancelar('panelProveedor')) return false;"
+					update="#{parentUpdate} :evaluarModificaciones"
+					styleClass="stdbtn" style="float: right;" />
+				<h:panelGroup rendered="#{action.proveedorEnviado}">
+					<p:commandButton value="Aprobar"
+						action="#{parentAction.aprobar}"
+						update="#{parentUpdate} :evaluarModificaciones" styleClass="stdbtn"
+                        rendered="#{not action.proveedor.aprobadoImpuestos}" />
+					<p:commandButton value="Rechazar"
+						action="#{parentAction.rechazar}"
+						update="#{parentUpdate} :evaluarModificaciones" styleClass="stdbtn" />
+					<h:outputText value="Motivo Rechazo" style="margin: 0 9px 0 6px;" />
+					<p:inputText value="#{action.motivoRechazo}" />
+				</h:panelGroup>
+				<h:panelGroup rendered="#{action.proveedorErrorAprobacion and action.puedeAprobarseProveedor}">
+					<p:commandButton value="Reintentar Aprobar"
+						action="#{action.reintentarAprobar}"
+						update=":panelProveedor :evaluarModificaciones" styleClass="stdbtn" />
+				</h:panelGroup>
+				<br clear="all" />
+			</h:panelGroup>
+			
+			<h:panelGroup rendered="#{perfil == 'TESORERIA'}">
+				<p:commandButton value="Volver"
+					action="#{parentAction.back}"
+					onclick="if(actionCancelar('panelProveedor')) return false;"
+					update="#{parentUpdate} :evaluarModificaciones"
+					styleClass="stdbtn" style="float: right;" />
+				<h:panelGroup rendered="#{action.proveedorEnviado}">
+					<p:commandButton value="Aprobar"
+						action="#{parentAction.aprobar}"
+						update="#{parentUpdate} :evaluarModificaciones" styleClass="stdbtn"
+                        rendered="#{not action.proveedor.aprobadoTesoreria}" />
+					<p:commandButton value="Rechazar"
+						action="#{parentAction.rechazar}"
+						update="#{parentUpdate} :evaluarModificaciones" styleClass="stdbtn" />
+					<h:outputText value="Motivo Rechazo" style="margin: 0 9px 0 6px;" />
+					<p:inputText value="#{action.motivoRechazo}" />
+				</h:panelGroup>
+				<h:panelGroup rendered="#{action.proveedorErrorAprobacion and action.puedeAprobarseProveedor}">
+					<p:commandButton value="Reintentar Aprobar"
+						action="#{action.reintentarAprobar}"
+						update=":panelProveedor :evaluarModificaciones" styleClass="stdbtn" />
+				</h:panelGroup>
+				<br clear="all" />
+			</h:panelGroup>
+			
+		</h:form>
+	</h:panelGroup>
+<ui:remove>
+<!-- 	<script type="text/javascript"> init_validacion("panelProveedor"); </script> -->
+</ui:remove>
+
+
+
+	<!-- POP-UP MULTILATERAL -->
+	<p:dialog widgetVar="dlgPopUpMultilateral" header="Agregar IIBB Multilateral"
+			showEffect="fade" hideEffect="fade" resizable="true" modal="true" dynamic="true" onShow="PF('dlgPopUpMultilateral').initPosition();">
+		<h:form id="panelProveedorMultilateralForm" styleClass="stdform">
+			<h:panelGroup rendered="#{action.operacionDeMultilateralDialog}">
+				<h:panelGroup rendered="#{action.setOperacionDeMultilateralDialogFalse()}"></h:panelGroup>
+				<p:messages for="mensajesMultilateralDialog" id="mensajesMultilateral" />
+			</h:panelGroup>
+			
+			<div class="par">
+				<h:outputLabel style="width: 100px;" value="Jurisdicción *" />
+			 	<h:selectOneMenu id="comboIIBB" value="#{action.nuevoIIBB.jurisdiccion}"
+			 		converter="provinciaConverter">
+	   				<f:selectItems value="#{action.provinciasDisponibles}" 
+	   					var="item" itemLabel="#{item.nombre}" />
+	  			</h:selectOneMenu>
+			</div>
+			<div class="par">
+				<h:panelGroup id="chkExento" >
+					<h:outputLabel style="width: 100px;" value="Exento *" />
+					<p:commandLink style="margin-top: 10px;"
+						action="#{action.changeExentoIIBB}"
+						update="chkExento, porExclusion" immediate="true" bypassUpdates="true"
+						global="false" limitToList="true" status="ninguno">
+						<span class="switch #{action.nuevoIIBB.exento ? '' : 'switch-off'}"></span>
+					</p:commandLink>
+				</h:panelGroup>
+			</div>
+			<div class="par">
+				<h:outputLabel style="width: 100px;" value="% de Exclusión" />
+				<p:inputText id="porExclusion" 
+					value="#{action.nuevoIIBB.porcentajeExclusion}"
+					disabled="#{not action.nuevoIIBB.exento}" />
+			</div>
+			
+			<div>
+				<p:commandButton styleClass="stdbtn" value="Agregar" 
+					action="#{action.agregarIIBBMultilateral}"
+					update=":panelProveedorMultilateralForm :panelProveedorForm:listaIIBBMultilateral, comboIIBB, :evaluarModificaciones" />
+				<p:commandButton styleClass="stdbtn" value="Cancelar" 
+					action="#{action.cancelarIIBBMultilateral}"
+					onclick="PF('dlgPopUpMultilateral').hide();"
+					update=":panelProveedorForm:listaIIBBMultilateral" />
+			</div>
+		</h:form>
+	</p:dialog>
+	
+	<!-- POP-UP ADJUNTOS -->
+	<p:dialog widgetVar="dlgPopUpAdjuntos" header="Adjuntos"
+			showEffect="fade" hideEffect="fade" resizable="true" modal="true" dynamic="true" onShow="PF('dlgPopUpAdjuntos').initPosition();">
+		<h:form id="panelProveedorAdjuntosForm" styleClass="stdform" enctype="multipart/form-data">	
+			<h:panelGroup rendered="#{action.operacionDeAdjuntoDialog}">
+				<h:panelGroup rendered="#{action.setOperacionDeAdjuntoDialogFalse()}"></h:panelGroup>
+				<p:messages for="mensajesAdjuntoDialog" id="mensajesAdjunto" />
+			</h:panelGroup>
+			<div>
+				<div class="par">
+					<h:outputLabel style="width: 100px;" value="Tipo *" />
+				 	<h:selectOneMenu value="#{action.nuevoAdjunto.tipoArchivo}">
+		   				<f:selectItems value="#{action.tipoAdjuntos}" 
+		   					var="tipo" itemLabel="#{tipo.tipo}" itemValue="#{tipo.tipo}"/>
+	  				</h:selectOneMenu> 
+  				</div>
+				<div class="par">
+					<h:outputLabel style="width: 100px;" value="Descripción *" />
+					<h:inputText value="#{action.nuevoAdjunto.descripcion}"/>
+  				</div>
+				<div class="par">
+					<h:outputLabel style="width: 100px;" value="Archivo *" />
+					<h:panelGroup id="archivoSeleccionado">
+						<h:outputText value="#{action.nuevoAdjunto.nombre}" rendered="#{action.nuevoAdjunto != null}" style="font-weight: bold;" />
+					</h:panelGroup>
+					<p:fileUpload fileUploadListener="#{action.agregarAdjunto}"
+						mode="advanced"
+						update="archivoSeleccionado"
+						auto="true"
+						label="Seleccionar"
+						style="margin-left: 120px;"
+						styleClass="ui-fileupload-browserbuttononly" />
+					<div style="clear: both;" />
+  				</div>
+			</div>
+	
+			<div style="width: 100%; text-align: left">
+				<p:commandButton id="agregarAdjunto" value="Agregar"
+					action="#{action.agregarAdjunto}"
+					update=":panelProveedorAdjuntosForm :panelProveedorForm:adjuntos"
+					styleClass="stdbtn" />
+				<p:commandButton styleClass="stdbtn" value="Cancelar"
+					onclick="PF('dlgPopUpAdjuntos').hide();"/>
+			</div>
+		</h:form>
+	</p:dialog>
+	
+</ui:composition>

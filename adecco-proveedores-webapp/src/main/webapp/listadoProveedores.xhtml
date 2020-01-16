@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+	
+	<h:panelGroup layout="block" styleClass="widgetbox">
+		<div class="title"><h2 class="tabbed"><span>Filtros</span></h2></div>
+		<div class="widgetcontent">
+			<h:form styleClass="stdform">
+				<div class="stdform-content">
+					<div class="one_third">
+						<h:outputLabel value="Razón Social" />
+						<span class="field">
+							<h:inputText value="#{parentAction.razonSocial}" />
+						</span>
+					</div>
+					<div class="one_third">
+						<h:outputLabel value="CUIT" />
+						<span class="field">
+							<p:inputMask mask="99-99999999-9" value="#{parentAction.cuit}" />
+						</span>
+					</div>
+					<div class="one_third last">
+						<h:outputLabel value="Estado" />
+						<span class="field">
+							<h:selectOneMenu value="#{parentAction.estado}">
+								<f:selectItem itemLabel="Todos" value="#{null}" />
+								<f:selectItems
+									value="#{parentAction.estados}"
+									var="estado" itemLabel="#{estado.nombre}" />
+							</h:selectOneMenu>
+						</span>
+					</div>
+					<br clear="all" />
+					<div class="one_third">
+						<span class="field">
+							<p:commandButton styleClass="stdbtn"
+								value="Buscar"
+								action="#{parentAction.buscar}"
+								update="#{parentUpdate}"
+								oncomplete="if (typeof tablaProveedoresWV !== 'undefined') tablaProveedoresWV.getPaginator().setPage(0);" />
+						</span>
+					</div>
+					<br clear="all" />
+				</div>
+			</h:form>
+		</div>
+	</h:panelGroup>
+
+	<h:form id="formProveedores">
+		<h:outputText
+			rendered="#{parentAction.proveedores != null and empty parentAction.proveedores}"
+			value="No se encontraron Proveedores para los filtros indicados." style="font-weight: bold;" />
+		<h:panelGroup
+			rendered="#{not empty parentAction.proveedores}">
+			<p:dataTable id="proveedor" widgetVar="tablaProveedoresWV" var="item"
+				value="#{parentAction.proveedores}"
+				paginator="true" rows="10"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				currentPageReportTemplate="Mostrando {startRecord} a {endRecord} de {totalRecords} registros"
+				rowsPerPageTemplate="10,20,50"
+				emptyMessage=""
+				paginatorAlwaysVisible="false"
+				paginatorPosition="bottom"
+				styleClass="stdtable">
+
+				<p:column styleClass="head0 con0">
+					<f:facet name="header">
+						<h:outputText value="Razón Social" />
+					</f:facet>
+					<p:commandLink value="#{item.razonSocial}"
+						action="#{parentAction.loadProveedor(item)}"
+						update="#{parentUpdate}" />
+					<f:facet name="footer">
+						<h:outputText value="Razón Social" />
+					</f:facet>
+				</p:column>
+
+				<p:column styleClass="head1 con1" style="text-align: center;">
+					<f:facet name="header">
+						<h:outputText value="Estado" />
+					</f:facet>
+					<h:outputText value="#{item.estado.nombre}" />
+					<f:facet name="footer">
+						<h:outputText value="Estado" />
+					</f:facet>
+				</p:column>
+
+				<p:column styleClass="head0 con0" style="text-align: center;">
+					<f:facet name="header">
+						<h:outputText value="Aprob. Compras" />
+					</f:facet>
+					<h:outputText value="SI"
+						rendered="#{item.aprobadoCompras}" />
+					<h:outputText value="NO"
+						rendered="#{not item.aprobadoCompras}" />
+					<f:facet name="footer">
+						<h:outputText value="Aprob. Compras" />
+					</f:facet>
+				</p:column>
+
+				<p:column styleClass="head1 con1" style="text-align: center;">
+					<f:facet name="header">
+						<h:outputText value="Aprob. Impuestos" />
+					</f:facet>
+					<h:outputText value="SI"
+						rendered="#{item.aprobadoImpuestos}" />
+					<h:outputText value="NO"
+						rendered="#{not item.aprobadoImpuestos}" />
+					<f:facet name="footer">
+						<h:outputText value="Aprob. Impuestos" />
+					</f:facet>
+				</p:column>
+
+				<p:column styleClass="head0 con0" style="text-align: center;">
+					<f:facet name="header">
+						<h:outputText value="Aprob. Tesorería" />
+					</f:facet>
+					<h:outputText value="SI"
+						rendered="#{item.aprobadoTesoreria}" />
+					<h:outputText value="NO"
+						rendered="#{not item.aprobadoTesoreria}" />
+					<f:facet name="footer">
+						<h:outputText value="Aprob. Tesorería" />
+					</f:facet>
+				</p:column>
+
+			</p:dataTable>
+		</h:panelGroup>
+	</h:form>
+</ui:composition>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui">
+
+<!--@elvariable id="controller" type="ar.com.adecco.proveedores.action.PanelControlAction"-->
+<ui:param name="controller" value="#{panelControlAction}" />
+
+<p:outputPanel id="facturas">
+
+    <div class="contenttitle">
+        <h2 class="list">
+            <span>Facturas</span>
+        </h2>
+    </div>
+
+    <h:form id="formFacturas" styleClass="stdform">
+        <h:panelGroup>
+            <p:dataTable id="factura" var="_factura"
+                value="#{controller.facturas}" lazy="true"
+                paginator="true" rows="5" paginatorPosition="bottom"
+                paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                currentPageReportTemplate="Mostrando {startRecord} a {endRecord} de {totalRecords} registros"
+                rowsPerPageTemplate="5,10,20,50"
+                emptyMessage="No hay facturas asociadas"
+                paginatorAlwaysVisible="false"
+                styleClass="stdtable">
+
+                <p:column styleClass="head0 con0" style="text-align: center;">
+                    <f:facet name="header">
+                        <h:outputText value="Número" />
+                    </f:facet>
+                    <p:commandLink value="#{_factura.letraNumero}" actionListener="#{controller.showFactura(_factura)}"
+                        update=":panelControl" />
+                    <f:facet name="footer">
+                        <h:outputText value="Número" />
+                    </f:facet>
+                </p:column>
+
+                <p:column styleClass="head1 con1" style="text-align: center;">
+                    <f:facet name="header">
+                        <h:outputText value="Estado" />
+                    </f:facet>
+                    <h:outputText value="#{_factura.estado.nombre}" />
+                    <f:facet name="footer">
+                        <h:outputText value="Estado" />
+                    </f:facet>
+                </p:column>
+
+                <p:column styleClass="head0 con0" style="text-align: center;">
+                    <f:facet name="header">
+                        <h:outputText value="Fecha" />
+                    </f:facet>
+                    <h:outputText value="#{_factura.fecha}">
+                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                    <f:facet name="footer">
+                        <h:outputText value="Fecha" />
+                    </f:facet>
+                </p:column>
+
+                <p:column styleClass="head1 con1" style="text-align: center;">
+                    <f:facet name="header">
+                        <h:outputText value="Orden de Compra" />
+                    </f:facet>
+                    <h:outputText value="#{_factura.ordenCompra.numero}" />
+                    <f:facet name="footer">
+                        <h:outputText value="Orden de Compra" />
+                    </f:facet>
+                </p:column>
+
+                <ui:remove>
+                <!--<p:column styleClass="head1 con1">-->
+                    <!--<f:facet name="header">-->
+                        <!--<h:outputText value="Proveedor" />-->
+                    <!--</f:facet>-->
+                    <!--<h:outputText value="#{_factura.proveedor.razonSocial}" />-->
+                    <!--<f:facet name="footer">-->
+                        <!--<h:outputText value="Proveedor" />-->
+                    <!--</f:facet>-->
+                <!--</p:column>-->
+                </ui:remove>
+
+                <p:column styleClass="head0 con0" style="text-align: right;">
+                    <f:facet name="header">
+                        <h:outputText value="Importe" />
+                    </f:facet>
+                    <h:outputText value="#{_factura.importe}">
+                        <f:convertNumber type="currency" currencySymbol="" />
+                    </h:outputText>
+                    <f:facet name="footer">
+                        <h:outputText value="Importe" />
+                    </f:facet>
+                </p:column>
+            </p:dataTable>
+
+        </h:panelGroup>
+
+        <div style="text-align: right">
+            <p:commandButton value="Alta de Factura" actionListener="#{controller.showNewFactura()}"
+                update=":panelControl" disabled="#{not controller.proveedorHabilitado}"
+                styleClass="radius2" style="margin: 6px 0 0;" />
+        </div>
+    </h:form>
+</p:outputPanel>
+</ui:composition>

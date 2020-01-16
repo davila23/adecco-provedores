@@ -1,0 +1,93 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<body bgcolor="#e7e7e7">
+		<!--tabla global-->
+		<table width="600" border="0" align="center"  cellpadding="0" cellspacing="0" bgcolor="#cecece" style="display:block; padding:16px 16px 16px 16px;">
+			<tr>
+				<td align="center">
+					<!--table-->
+					<table width="600" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
+						<tr>
+							<!--td left-->
+							<td>
+							</td>
+							<!--/td left-->
+							<!--td central-->
+							<td width="556" bgcolor="#FFFFFF" align="center">
+								<!--table central-->
+								<table width="556" border="0" cellpadding="0" cellspacing="0">
+									<tr>
+										<td bgcolor="#FFFFFF">&nbsp;</td>
+									</tr>
+									<tr>
+										<td width="556" align="left">
+											<img width="557" height="88" border="0" align="left" alt="Adecco Argentina" src="$mailContext.insert("adecco_logo.gif")" />
+										</td>
+									</tr>
+									<tr>
+										<td height="35px">
+											<img src="$mailContext.insert("header_lineaseparadora.jpg")"  width="556" height="12" /></td>
+									</tr>
+									<tr>
+										<td align="left" style="font-family:Arial, Helvetica, sans-serif; color:#756c63; font-weight:bold;">
+											$subject
+										</td>
+									</tr>
+									<tr>
+										<td height="10"></td>
+									</tr>
+									<tr>
+										<td align="left" valign="top" style="font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#333333; padding-left:10px;">
+											$message
+										</td>
+									</tr>
+									<tr>
+										<td width="556" height="10"></td>
+									</tr>
+									<tr>
+										<td width="556" height="10"></td>
+									</tr>
+									<tr>
+										<td width="556" height="3" bgcolor="#FFFFFF"></td>
+									</tr>
+									<tr>
+										<td width="556" height="1" bgcolor="#CCCCCC"></td>
+									</tr>
+									<tr>
+										<td width="556" height="10"></td>
+									</tr>
+									<!--footer-->
+									<tr>
+										<td width="504" height="30" bgcolor="#f4f4f4">
+											<!--info footer-->
+											<table width="553" border="0" cellspacing="0" cellpadding="0">
+												<tr>
+													<td width="375" style="text-align:right;">
+														<p style="font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#747474; cursor:pointer; text-decoration:none; text-align:right; padding-right:10px;">Configuraci&oacute;n de correo electr&oacute;nico
+														</p>
+													</td>
+												</tr>
+											</table>
+											<!--/info footer-->
+									   </td>
+									</tr>
+									<!--/footer-->
+									<tr>
+										<td>&nbsp;</td>
+									</tr>
+								</table>
+								<!--/table central-->
+							</td>
+							<!--/td central-->
+							<!--td right-->
+							<td>
+							</td>
+							<!--/td right-->
+						</tr>
+					</table>
+					<!--/table global-->
+				</td>
+			</tr>
+		</table>
+		<!--/tabla global-->
+	</body>
+</html>

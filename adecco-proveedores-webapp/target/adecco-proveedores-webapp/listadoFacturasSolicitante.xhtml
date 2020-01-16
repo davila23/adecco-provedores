@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    template="/WEB-INF/templates/defaultNoRight.xhtml">
+
+<!--@elvariable id="controller" type="ar.com.adecco.proveedores.action.AceptacionFacturaAction"-->
+<ui:param name="controller" value="#{aceptacionFacturaAction}" />
+
+<ui:define name="head">
+    <h:outputScript library="js" name="validacion.js" />
+</ui:define>
+
+<ui:define name="title">Listado de Comprobantes</ui:define>
+
+<ui:define name="content">
+    <p:outputPanel id="panelControl">
+        <h:panelGroup rendered="#{controller.vistaActual('LISTADO')}">
+            <h:panelGroup layout="block" styleClass="widgetbox">
+                <div class="title"><h2 class="tabbed"><span>Filtros</span></h2></div>
+                <div class="widgetcontent">
+                    <h:form styleClass="stdform">
+                        <div class="stdform-content">
+                            <div class="one_third">
+                                <h:outputLabel value="Compañía" />
+                                <span class="field">
+                                    <h:selectOneMenu value="#{controller.filter.companiaId}">
+                                        <f:selectItems
+                                            value="#{controller.companiasAdecco}"
+                                            var="_compania" itemValue="#{_compania.id}"
+                                            itemLabel="#{_compania.nombre}" />
+                                    </h:selectOneMenu>
+                                </span>
+                            </div>
+                            <div class="one_third">
+                                <h:outputLabel value="Proveedor" />
+                                <span class="field">
+                                    <h:inputText value="#{controller.filter.proveedorNombre}" />
+                                </span>
+                            </div>
+                            <div class="one_third last">
+                                <h:outputLabel value="CUIT" />
+                                <span class="field">
+                                    <p:inputMask mask="99-99999999-9" value="#{controller.filter.proveedorCuit}" />
+                                </span>
+                            </div>
+                            <br clear="all" />
+                            <div class="one_third">
+                                <h:outputLabel value="Fecha Desde" />
+                                <span class="field">
+                                    <p:calendar
+                                        value="#{controller.filter.fechaDesde}"
+                                        converterMessage="El formato del campo Fecha Desde debe ser dd/mm/aaaa"
+                                        pattern="dd/MM/yyyy">
+                                        <f:validator validatorId="validadorFecha" />
+                                    </p:calendar>
+                                </span>
+                            </div>
+                            <div class="one_third">
+                                <h:outputLabel value="Fecha Hasta" />
+                                <span class="field">
+                                    <p:calendar
+                                        value="#{controller.filter.fechaHasta}"
+                                        converterMessage="El formato del campo Fecha Hasta debe ser dd/mm/aaaa"
+                                        pattern="dd/MM/yyyy">
+                                        <f:validator validatorId="validadorFecha" />
+                                    </p:calendar>
+                                </span>
+                            </div>
+                            <div class="one_third last">
+                                <h:outputLabel value="Estado" />
+                                <span class="field">
+                                    <h:selectOneMenu value="#{controller.filter.estado}">
+                                        <f:selectItem itemLabel="Todos" itemValue="#{null}" />
+                                        <f:selectItems value="#{controller.estados}"
+                                            var="estado" itemLabel="#{estado.nombre}" />
+                                    </h:selectOneMenu>
+                                </span>
+                            </div>
+                            <br clear="all" />
+                            <div class="one_third">
+                                <h:outputLabel value="Número Desde" />
+                                <span class="field">
+                                    <p:inputMask mask="9999-99999999" value="#{controller.filter.numeroDesde}" />
+                                </span>
+                            </div>
+                            <div class="one_third">
+                                <h:outputLabel value="Número Hasta" />
+                                <span class="field">
+                                    <p:inputMask mask="9999-99999999" value="#{controller.filter.numeroHasta}" />
+                                </span>
+                            </div>
+                            <br clear="all" />
+                            <div class="one_third">
+                                <span class="field">
+                                    <p:commandButton styleClass="stdbtn" value="Buscar"
+                                        action="#{controller.buscar}"
+                                        update=":panelControl"
+                                        oncomplete="if (typeof PF('tablaFacturasWV') !== 'undefined') PF('tablaFacturasWV').getPaginator().setPage(0);" />
+                                </span>
+                            </div>
+                            <br clear="all" />
+                        </div>
+                    </h:form>
+                </div>
+            </h:panelGroup>
+
+            <h:form id="formAceptacionFacturas" styleClass="stdform">
+                <h:panelGroup>
+                    <p:dataTable id="facturas" widgetVar="tablaFacturasWV" var="_comprobante"
+                        value="#{controller.comprobantes}" lazy="true"
+                        selection="#{controller.selectedComprobantes}"
+                        rowSelectMode="none"
+                        paginator="true" rows="10"
+                        paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                        currentPageReportTemplate="Mostrando {startRecord} a {endRecord} de {totalRecords} registros"
+                        rowsPerPageTemplate="10,20,50"
+                        emptyMessage="No se encontraron comprobantes para los filtros indicados."
+                        paginatorAlwaysVisible="false"
+                        paginatorPosition="bottom"
+                        styleClass="stdtable">
+
+                        <p:column selectionMode="multiple" style="width: 18px;"
+                                  styleClass="input-ignorar-cambios head0 con0" />
+
+                        <p:column styleClass="head1 con1" style="text-align: center;">
+                            <f:facet name="header">
+                                <h:outputText value="Número" />
+                            </f:facet>
+                            <p:commandLink value="#{_comprobante.tipoLetraNumero}" action="#{controller.show(_comprobante)}"
+                                update=":panelControl" />
+                            <f:facet name="footer">
+                                <h:outputText value="Número" />
+                            </f:facet>
+                        </p:column>
+
+                        <p:column styleClass="head0 con0" style="text-align: center;">
+                            <f:facet name="header">
+                                <h:outputText value="Estado" />
+                            </f:facet>
+                            <h:outputText value="#{_comprobante.estado.nombre}" />
+                            <f:facet name="footer">
+                                <h:outputText value="Estado" />
+                            </f:facet>
+                        </p:column>
+
+                        <p:column styleClass="head1 con1" style="text-align: center;">
+                            <f:facet name="header">
+                                <h:outputText value="Fecha" />
+                            </f:facet>
+                            <h:outputText value="#{_comprobante.fecha}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                            <f:facet name="footer">
+                                <h:outputText value="Fecha" />
+                            </f:facet>
+                        </p:column>
+
+                        <p:column styleClass="head0 con0" style="text-align: center;">
+                            <f:facet name="header">
+                                <h:outputText value="Orden de Compra" />
+                            </f:facet>
+                            <h:outputText value="#{controller.getOrdenCompra(_comprobante).numero}" />
+                            <f:facet name="footer">
+                                <h:outputText value="Orden de Compra" />
+                            </f:facet>
+                        </p:column>
+
+                        <p:column styleClass="head1 con1" style="text-align: center;">
+                            <f:facet name="header">
+                                <h:outputText value="Factura aplicada" />
+                            </f:facet>
+                            <h:outputText value="#{controller.getFacturaAplicada(_comprobante).tipoLetraNumero}" />
+                            <f:facet name="footer">
+                                <h:outputText value="Factura aplicada" />
+                            </f:facet>
+                        </p:column>
+
+                        <p:column styleClass="head0 con0">
+                            <f:facet name="header">
+                                <h:outputText value="Proveedor" />
+                            </f:facet>
+                            <h:outputText value="#{_comprobante.proveedor.razonSocial}" />
+                            <f:facet name="footer">
+                                <h:outputText value="Proveedor" />
+                            </f:facet>
+                        </p:column>
+
+                        <p:column styleClass="head1 con1" style="text-align: center;">
+                            <f:facet name="header">
+                                <h:outputText value="CUIT" />
+                            </f:facet>
+                            <h:outputText value="#{_comprobante.proveedor.cuit}" />
+                            <f:facet name="footer">
+                                <h:outputText value="CUIT" />
+                            </f:facet>
+                        </p:column>
+
+                        <p:column styleClass="head0 con0" style="text-align: right;">
+                            <f:facet name="header">
+                                <h:outputText value="Importe" />
+                            </f:facet>
+                            <h:outputText value="#{_comprobante.importe}">
+                                <f:convertNumber type="currency" currencySymbol="" />
+                            </h:outputText>
+                            <f:facet name="footer">
+                                <h:outputText value="Importe" />
+                            </f:facet>
+                        </p:column>
+                    </p:dataTable>
+
+                    <h:panelGroup rendered="#{controller.filter.estado == controller.estadoEnviada}">
+                        <div>
+                            <br />
+                            <p:commandButton value="Aceptar" action="#{controller.aceptarFacturas}"
+                                update=":panelControl" styleClass="stdbtn" />
+                        </div>
+                    </h:panelGroup>
+                </h:panelGroup>
+
+            </h:form>
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{not controller.vistaActual('LISTADO')}">
+            <h:panelGroup rendered="#{controller.vistaActual('FACTURA')}">
+                <ui:include src="/administracionFactura.xhtml">
+                    <ui:param name="perfil" value="ACEPTADOR" />
+                </ui:include>
+            </h:panelGroup>
+            <h:panelGroup rendered="#{controller.vistaActual('NOTACREDITO')}">
+                <ui:include src="/notaCreditoProveedor.xhtml">
+                    <ui:param name="perfil" value="ACEPTADOR" />
+                </ui:include>
+            </h:panelGroup>
+            <h:panelGroup rendered="#{controller.vistaActual('NOTADEBITO')}">
+                <ui:include src="/notaDebitoProveedor.xhtml">
+                    <ui:param name="perfil" value="ACEPTADOR" />
+                </ui:include>
+            </h:panelGroup>
+            <br />
+
+            <h:form styleClass="stdform">
+                <p:commandButton action="#{controller.volver}"
+                                 value="Volver" styleClass="stdbtn"
+                                 update=":panelControl"
+                                 style="float: right;" />
+                <h:panelGroup rendered="#{controller.comprobante.estado == controller.estadoEnviada}">
+                    <p:commandButton action="#{controller.aceptar}"
+                                     value="Aprobar" styleClass="stdbtn"
+                                     update=":panelControl"/>
+                    <p:commandButton action="#{controller.rechazar}"
+                                     value="Rechazar" styleClass="stdbtn"
+                                     onclick="if(!confirm('¿Está seguro que desea rechazar el comprobante?')) return false;"
+                                     update=":panelControl" />
+                    <h:outputText value="Motivo Rechazo *" style="margin: 0 9px 0 6px;" />
+                    <h:inputText value="#{controller.motivoRechazo}" />
+                </h:panelGroup>
+                <br clear="all" />
+            </h:form>
+        </h:panelGroup>
+
+    </p:outputPanel>
+</ui:define>
+</ui:composition>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui">
+
+<!--@elvariable id="controller" type="ar.com.adecco.proveedores.action.PanelControlAction"-->
+<ui:param name="controller" value="#{panelControlAction}" />
+
+<p:outputPanel id="ordenesCompra">
+    <div class="contenttitle">
+        <h2 class="list">
+            <span>Ordenes de Compra</span>
+        </h2>
+    </div>
+
+    <h:form id="formOrdenesCompra" styleClass="stdform">
+        <h:panelGroup>
+            <p:dataTable id="ordenesCompra" var="_ordenCompra"
+                value="#{controller.ordenesCompra}" lazy="true"
+                paginator="true" rows="5" paginatorPosition="bottom"
+                paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                currentPageReportTemplate="Mostrando {startRecord} a {endRecord} de {totalRecords} registros"
+                rowsPerPageTemplate="5,10,20,50"
+                emptyMessage="No hay Ordenes de Compra asociadas"
+                paginatorAlwaysVisible="false"
+                styleClass="stdtable">
+
+                <p:column styleClass="head0 con0" style="text-align: center;">
+                    <f:facet name="header">
+                        <h:outputText value="Número" />
+                    </f:facet>
+                    <p:commandLink value="#{_ordenCompra.numero}" action="#{controller.showOrdenCompra(_ordenCompra)}"
+                        update=":panelControl" />
+                    <f:facet name="footer">
+                        <h:outputText value="Número" />
+                    </f:facet>
+                </p:column>
+
+                <ui:remove>
+                <!--<p:column styleClass="head1 con1">-->
+                    <!--<f:facet name="header">-->
+                        <!--<h:outputText value="Proveedor" />-->
+                    <!--</f:facet>-->
+                    <!--<h:outputText value="#{_ordenCompra.proveedor.nombre}" />-->
+                    <!--<f:facet name="footer">-->
+                        <!--<h:outputText value="Proveedor" />-->
+                    <!--</f:facet>-->
+                <!--</p:column>-->
+                </ui:remove>
+
+                <p:column styleClass="head1 con1" style="text-align: center;">
+                    <f:facet name="header">
+                        <h:outputText value="Fecha Aprobación" />
+                    </f:facet>
+                    <h:outputText value="#{_ordenCompra.fechaAprobacion}">
+                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                    <f:facet name="footer">
+                        <h:outputText value="Fecha Aprobación" />
+                    </f:facet>
+                </p:column>
+
+                <p:column styleClass="head0 con0" style="text-align: center;">
+                    <f:facet name="header">
+                        <h:outputText value="Moneda" />
+                    </f:facet>
+                    <h:outputText value="#{_ordenCompra.moneda.codigoAfip}" />
+                    <f:facet name="footer">
+                        <h:outputText value="Moneda" />
+                    </f:facet>
+                </p:column>
+
+            </p:dataTable>
+        </h:panelGroup>
+
+    </h:form>
+
+</p:outputPanel>
+</ui:composition>

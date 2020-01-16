@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+	
+	<h:panelGroup id="#{prependId ? formId.concat('_') : ''}evaluarModificaciones">
+		<h:panelGroup rendered="#{action.entidadModificada}">
+			<h:panelGroup rendered="#{action.setEntidadModificadaFalse()}"></h:panelGroup>
+			<script type="text/javascript"> actionConfirmar("#{formId}"); </script>
+		</h:panelGroup>
+		<h:panelGroup rendered="#{action.entidadGuardada}">
+			<h:panelGroup rendered="#{action.setEntidadGuardadaFalse()}"></h:panelGroup>
+			<script type="text/javascript"> actionAceptar("#{formId}"); </script>
+		</h:panelGroup>
+	</h:panelGroup>
+	<h:panelGroup rendered="#{inicializar != false}">
+		<script type="text/javascript"> init_validacion("#{formId}"); </script>
+	</h:panelGroup>
+</ui:composition>

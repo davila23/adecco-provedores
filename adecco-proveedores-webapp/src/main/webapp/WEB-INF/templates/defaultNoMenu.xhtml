@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <f:facet name="first">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Adecco - Proveedores</title>
+    </f:facet>
+    <link rel="icon" href="http://agora.adecco.com.ar:4545/theme/agora/php//images/bra_favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="http://agora.adecco.com.ar:4545/theme/agora/php/css/style.css?v=1" />
+    <link rel="stylesheet" type="text/css" href="http://agora.adecco.com.ar:4545/theme/agora/php/css/style.custom.css" />
+    <link rel="stylesheet" type="text/css" href="http://agora.adecco.com.ar:4545/theme/agora/php/css/primefaces.4.0.custom.css" />
+    <script type="text/javascript" src="http://agora.adecco.com.ar:4545/theme/agora/php/js/plugins/jquery-1.7.min.js" />
+    <script type="text/javascript" src="http://agora.adecco.com.ar:4545/theme/agora/php/js/plugins/jquery.flot.min.js" />
+    <script type="text/javascript" src="http://agora.adecco.com.ar:4545/theme/agora/php/js/plugins/jquery.flot.resize.min.js" />
+    <script type="text/javascript" src="http://agora.adecco.com.ar:4545/theme/agora/php/js/plugins/jquery-ui-1.8.16.custom.min.js" />
+    <script type="text/javascript" src="http://agora.adecco.com.ar:4545/theme/agora/php/js/custom/general.js" />
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-33312958-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+    <script type="text/javascript">
+//<![CDATA[
+PrimeFaces.widget.DataTable.prototype.onRowClickAux = PrimeFaces.widget.DataTable.prototype.onRowClick;
+PrimeFaces.widget.DataTable.prototype.onRowClick = function() {
+    if (this.cfg.rowSelectMode === 'add' || this.cfg.rowSelectMode === 'new')
+        PrimeFaces.widget.DataTable.prototype.onRowClickAux.apply(this, arguments);
+}
+function formatearMessages() {
+    $('#mensajesGlobal.sinformato .notification').wrapInner('<p />').prepend('<a class="close"></a>').find('.close').click(function() {
+        $(this).parent().hide();
+    });
+    $('#mensajesGlobal.sinformato').removeClass('sinformato').show();
+};
+//]]>
+    </script>
+
+    <ui:insert name="head" />
+</h:head>
+<h:body>
+    <ui:insert name="popups" />
+    <!-- START OF HEADER -->
+    <ui:include src="header.xhtml" />
+    <ui:insert name="header" />
+    <!-- END OF HEADER -->
+
+    <div class="mainwrapper">
+        <div class="mainwrapperinner">
+            <div class="mainleft">
+                <div class="mainleftinner">
+                    <!-- START LEFT COLUMNG -->
+                    <ui:insert name="leftColumn" />
+                    <!-- END LEFT COLUMNG -->
+                </div>
+                <!--mainleftinner-->
+            </div>
+            <!--mainleft-->
+
+            <div class="maincontent noright">
+                <div class="maincontentinner" style="display:table">
+
+                    <h:form prependId="false">
+
+                            <h:messages id="mensajesGlobal" styleClass="messages sinformato" style="display: none;"
+                            infoClass="notification msginfo" warnClass="notification msgalert"
+                            errorClass="notification msgerror" fatalClass="notification msgerror" />
+                            <script type="text/javascript">
+                                formatearMessages();
+                            </script>
+
+                    </h:form>
+                    <!-- START CONTENT -->
+                    <ui:insert name="content" />
+                    <!-- END CONTENT -->
+
+                </div>
+                <div class="footer" style="float:lefta">
+                    <!-- START FOOTER -->
+                    <ui:include src="footer.xhtml" />
+                    <!-- END FOOTER -->
+                </div>
+            </div>
+        </div>
+    </div>
+</h:body>
+</html>

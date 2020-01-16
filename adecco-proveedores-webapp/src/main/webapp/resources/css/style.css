@@ -1,0 +1,95 @@
+/* Estilos propios del proyecto */
+
+.ui-datatable-data .filaagregada {
+	background-color: #eeeeee;
+}
+
+.ui-datatable-data .filaagregada > td {
+	border-color: #e0e0e0;
+}
+
+.row-lote-derivado {
+    background-color: #fff0f0;
+}
+
+.ui-datatable .ui-datatable-data tr.noseleccionable td {
+	color: #999;
+}
+
+.celdainput {
+	text-align: center;
+}
+
+.ui-datatable .celdainput input[type=text],
+.ui-datatable .celdainput input[type=password] {
+	padding: 6px 4px;
+}
+
+.ui-datatable .celdainput select {
+	padding: 5px 4px;
+}
+
+.celdainput input.inputnovedad {
+	text-align: right;
+	width: 40px;
+}
+
+.enliqant {
+	background-color: #ffffff;
+}
+
+.ui-datatable .ui-datatable-data .noenliqant {
+	background-color: #eeeeee;
+	border-color: #e0e0e0;
+}
+
+.celdainput input.campoopcional {
+	background-color: #fffccc;	
+}
+
+.celdainput .inputconcepto[type=text] {
+	text-align: right;
+	width: 40px;
+}
+
+.celdainput .datepicker.inputconcepto {
+	width: 40px;
+}
+
+.ui-datatable .ui-widget-header .inputconcepto[type=checkbox],
+.celdainput .inputconcepto[type=checkbox] {
+	margin: 0 15px;
+	width: 20px;
+}
+.celdainput .inputconcepto[type=checkbox]:focus {
+	outline: 1px dotted #888888;
+}
+.rellenado-header {
+	font-size: 11px;
+	display: block;
+}
+
+.ui-datatable tbody tr.ui-state-highlight2 td {
+	background: none repeat scroll 0 0 #FFFCCC;
+	color: #333333;
+}
+.ui-datatable th.ui-state-default {
+	vertical-align: top;
+}
+
+.value-failure {
+    color: #ff0000;
+    font-weight: bold;
+}
+.value-warning {
+    color: #aaaa00;
+    font-weight: bold;
+}
+.value-normal {
+    color: inherit;
+}
+
+.tooltip-error-list li {
+    list-style-type: none;
+}
+
